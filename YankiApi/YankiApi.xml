@@ -4,6 +4,32 @@
         <name>YankiApi</name>
     </assembly>
     <members>
+        <member name="M:YankiApi.Controllers.V1.ProductController.Post(YankiApi.DTOs.ProductDTOs.ProductPostDto)">
+             <summary>
+             Create Product
+             </summary>
+              <remarks>
+             Sample request:
+            
+                 POST api/product
+                 {
+                    "Title": "Test",
+                    "Price": "50"
+                    "DiscountPrice": "40"
+                    "Extax": "10"
+                    "Count": "40"
+                    "Description": "Test"
+                    "Seria": "Test"
+                    "İmage": "Test"
+                 }
+            
+             </remarks>
+             <param name="product"></param>
+             <returns>A newly created  setting Id</returns> 
+             <response code="400">Object Invalid</response>
+             <response code="409">Name Already Exist</response>
+             <response code="201">Name Already Exist</response>
+        </member>
         <member name="M:YankiApi.Controllers.V1.SettingsController.Post(YankiApi.DTOs.SettingDTOs.SettingPostDto)">
              <summary>
              Create Settings
@@ -41,6 +67,96 @@
             <response code="400">Object Invalid</response>
             <response code="404">Not Found</response>
             <response code="204">No Content</response>
+        </member>
+        <member name="T:YankiApi.DTOs.ProductDTOs.ProductPostDto">
+            <summary>
+            Create Product
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Title">
+            <summary>
+            Product Title
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Price">
+            <summary>
+            Product Price
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.DiscountedPrice">
+            <summary>
+            Product DiscountPrice
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.ExTax">
+            <summary>
+            Product Extax
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Count">
+            <summary>
+            Product Count
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Description">
+            <summary>
+            Product Description
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.LongDescription">
+            <summary>
+            Product Long Description
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Seria">
+            <summary>
+            Product Seria
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Code">
+            <summary>
+            Product Code
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Image">
+            <summary>
+            Product Image
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Files">
+            <summary>
+            Product Images Files
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Baskets">
+            <summary>
+            Product Baskets
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Reviews">
+            <summary>
+            Product Reviews
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.ProductImages">
+            <summary>
+            Product Images
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.ImageFile">
+            <summary>
+            Product Image File
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.CategoryId">
+            <summary>
+            Product Category Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductPostDto.Category">
+            <summary>
+            Product Category
+            </summary>
         </member>
         <member name="T:YankiApi.DTOs.SettingDTOs.SettingPostDto">
             <summary>

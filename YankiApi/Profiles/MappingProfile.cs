@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using YankiApi.DTOs.ProductDTOs;
 using YankiApi.DTOs.SettingDTOs;
 using YankiApi.Entities;
 
@@ -11,6 +12,7 @@ namespace YankiApi.Profiles
             CreateMap<SettingPostDto, Setting>();
             CreateMap<SettingUpdateDto, Setting>();
             CreateMap<Setting, SettingGetDto>();
+            CreateMap<ProductPostDto, Product>();
         }
     }
 }

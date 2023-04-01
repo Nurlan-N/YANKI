@@ -6,6 +6,7 @@ namespace YankiApi.Controllers.V1
     {
         public IActionResult Index()
         {
+            return Ok();
         }
     }
 }
