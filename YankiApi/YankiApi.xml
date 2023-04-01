@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>YankiApi</name>
+    </assembly>
+    <members>
+        <member name="M:YankiApi.Controllers.V1.SettingsController.Post(YankiApi.DTOs.SettingDTOs.SettingPostDto)">
+             <summary>
+             Create Settings
+             </summary>
+              <remarks>
+             Sample request:
+            
+                 POST api/settings
+                 {
+                    "key": "Test",
+                    "value": "test"
+                 }
+            
+             </remarks>
+             <param name="setting"></param>
+             <returns>A newly created  setting Id</returns> 
+             <response code="400">Object Invalid</response>
+             <response code="409">Name Already Exist</response>
+             <response code="201">Name Already Exist</response>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.SettingsController.Get">
+            <summary>
+            Get All Settings
+            </summary>
+            <param></param>
+            <returns></returns>
+            <response code="400">Object Invalid</response>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.SettingsController.Delete(System.Int32)">
+            <summary>
+            Delete a setting by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+            <response code="400">Object Invalid</response>
+            <response code="404">Not Found</response>
+            <response code="204">No Content</response>
+        </member>
+        <member name="T:YankiApi.DTOs.SettingDTOs.SettingPostDto">
+            <summary>
+            Create Setting
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.SettingDTOs.SettingPostDto.Key">
+            <summary>
+            Setting Key
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.SettingDTOs.SettingPostDto.Value">
+            <summary>
+            Setting Value
+            </summary>
+        </member>
+    </members>
+</doc>
