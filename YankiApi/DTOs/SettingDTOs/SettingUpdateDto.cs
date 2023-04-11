@@ -1,5 +1,8 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using YankiApi.DataAccessLayer;
+using YankiApi.Entities;
 
 namespace YankiApi.DTOs.SettingDTOs
 {
@@ -10,20 +13,13 @@ namespace YankiApi.DTOs.SettingDTOs
         public string Value { get; set; }
         public class SettingUpdateDtoValidation : AbstractValidator<SettingUpdateDto>
         {
-            public SettingUpdateDtoValidation(AppDbContext context)
+            public SettingUpdateDtoValidation()
             {
-                RuleFor(r => r.Key)
-                    .MaximumLength(50).WithMessage("Max 50 simvol");
-                RuleFor(r => r).Custom(async (r, validate) =>
-                {
-                    if (context.Settings.Any(s => s.Key.ToLower() == r.Key.ToLower()))
-                    {
-                        validate.AddFailure("Eyni Adda Setting Movcuddur");
-                    }
-                });
-
                 RuleFor(r => r.Value)
                     .MaximumLength(200).WithMessage("Max 200 simvol");
+                RuleFor(r => r.Key)
+                    .MaximumLength(50).WithMessage("Max 50 simvol");
+                
             }
         }
     }

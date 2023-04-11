@@ -13,6 +13,9 @@ namespace YankiApi.Profiles
             CreateMap<SettingUpdateDto, Setting>();
             CreateMap<Setting, SettingGetDto>();
             CreateMap<ProductPostDto, Product>();
+            CreateMap<Product, ProductGetDto>();
+            CreateMap<ProductUpdateDto, Product>();
+
         }
     }
 }

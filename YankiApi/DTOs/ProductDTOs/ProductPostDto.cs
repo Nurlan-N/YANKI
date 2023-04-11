@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Http.ModelBinding;
 using YankiApi.DataAccessLayer;
@@ -43,14 +44,6 @@ namespace YankiApi.DTOs.ProductDTOs
         /// </summary>
         public string? LongDescription { get; set; }
         /// <summary>
-        /// Product Seria
-        /// </summary>
-        public string? Seria { get; set; }
-        /// <summary>
-        /// Product Code
-        /// </summary>
-        public int Code { get; set; }
-        /// <summary>
         /// Product Image
         /// </summary>
         public string? Image { get; set; }
@@ -59,14 +52,6 @@ namespace YankiApi.DTOs.ProductDTOs
         /// </summary>
         [NotMapped]
         public IEnumerable<IFormFile>? Files { get; set; }
-        /// <summary>
-        /// Product Baskets
-        /// </summary>
-        public IEnumerable<Basket>? Baskets { get; set; }
-        /// <summary>
-        /// Product Reviews
-        /// </summary>
-        public IEnumerable<Review>? Reviews { get; set; }
         /// <summary>
         /// Product Images
         /// </summary>
@@ -80,10 +65,6 @@ namespace YankiApi.DTOs.ProductDTOs
         /// Product Category Id
         /// </summary>
         public int CategoryId { get; set; }
-        /// <summary>
-        /// Product Category
-        /// </summary>
-        public Category? Category { get; set; }
 
 
     }
@@ -99,14 +80,11 @@ namespace YankiApi.DTOs.ProductDTOs
             RuleFor(p => p.Description)
                 .MaximumLength(1000).WithMessage("Max 1000 simvol")
                 .NotEmpty().WithMessage("Mecburidir");
-            RuleFor(p => p.Image)
-                .MaximumLength(250).WithMessage("Max 250 simvol")
-                .NotEmpty().WithMessage("Mecburidir");
             RuleFor(r => r).Custom(async (r, validate) =>
             {
-                if (!await context.Categories.AnyAsync(c => !c.IsDeleted && c.Id == r.CategoryId))
+                if (!context.Categories.Any(c => !c.IsDeleted && c.Id == r.CategoryId))
                 {
-                    validate.AddFailure("CategoryId", $"Daxil olunan Bran Id {r.CategoryId} Yalnisdir");
+                    validate.AddFailure("CategoryId", $"Daxil olunan Category Id {r.CategoryId} Yalnisdir");
                 }
 
                 if (r.ImageFile is null)
@@ -161,12 +139,9 @@ namespace YankiApi.DTOs.ProductDTOs
                 }
 
                 string code = r.Title[..2] + context.Categories.FirstOrDefault(c => c.Id == r.CategoryId).Name[..1];
-                r.Seria = code.ToLower().Trim();
-                r.Code = context.Products.Where(p => p.Seria == r.Seria)
-                .OrderByDescending(p => p.Id).FirstOrDefault() is not null ?
-                    context.Products.Where(p => p.Seria == r.Seria).OrderByDescending(p => p.Id).FirstOrDefault().Code += 1 : 1;
             });
         }
+
     }
 
 }

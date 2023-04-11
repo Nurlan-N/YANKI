@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System;
 using YankiApi.DataAccessLayer;
 using YankiApi.DTOs.SettingDTOs;
 using YankiApi.Entities;
@@ -67,8 +69,12 @@ namespace YankiApi.Controllers.V1
         {
             return Ok(await _context.Settings.Where(s => !s.IsDeleted).ToListAsync());
         }
-
-        [HttpGet("get={id}")]
+        /// <summary>
+        /// Get Setting For ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             if (id <= 0)
@@ -88,17 +94,35 @@ namespace YankiApi.Controllers.V1
 
             return Ok(settingGetDto);
         }
-        [HttpPut("update={id}")]
+        /// <summary>
+        /// Update Setting
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="settingUpdateDto"></param>
+        /// <returns></returns>
+        [HttpPut]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Put(int id, SettingUpdateDto settingUpdateDto)
+        public async Task<IActionResult> Put([FromForm] SettingUpdateDto settingUpdateDto)
         {
-            
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            Setting setting = await _context.Settings.FirstOrDefaultAsync(c => c.Id == settingUpdateDto.Id);
+            if (setting == null) return NotFound("Id Is InCorrect");
+
+            if (_context.Settings.Any(s => s.Key.ToLower() == settingUpdateDto.Key.ToLower()))
+            {
+                return Conflict($"{settingUpdateDto.Key} Already Exist");
+            }
+
+            setting.Key = settingUpdateDto.Key;
+            setting.Value = settingUpdateDto.Value;
             await _context.SaveChangesAsync();
 
             return Ok();
         }
+
         /// <summary>
         /// Delete a setting by id
         /// </summary>
@@ -107,7 +131,7 @@ namespace YankiApi.Controllers.V1
         /// <response code="400">Object Invalid</response>
         /// <response code="404">Not Found</response>
         /// <response code="204">No Content</response>
-        [HttpDelete("delete={id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

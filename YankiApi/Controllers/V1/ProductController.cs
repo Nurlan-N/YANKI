@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using YankiApi.DataAccessLayer;
 using YankiApi.DTOs.ProductDTOs;
 using YankiApi.DTOs.SettingDTOs;
@@ -55,7 +56,61 @@ namespace YankiApi.Controllers.V1
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
-            return Ok(product);
+            return Ok();
+        }
+        /// <summary>
+        /// Get All Product
+        /// </summary>
+        /// <param></param>
+        /// <returns></returns>
+        /// <response code="400">Object Invalid</response>
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return Ok(await _context.Products.Where(s => !s.IsDeleted).ToListAsync());
+        }
+
+        /// <summary>
+        /// Get Product For ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Id boşdur.");
+            }
+
+            var product = await _context.Products
+                .FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
+
+            if (product == null)
+            {
+                return NotFound($"Id uyğunsuzdur: {id}");
+            }
+
+            var productGetDto = _mapper.Map<ProductGetDto>(product);
+
+            return Ok(productGetDto);
+        }
+        /// <summary>
+        /// Update Product
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="productUpdateDto"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [Produces("application/json")]
+        public async Task<IActionResult> Put([FromForm]ProductUpdateDto productUpdateDto)
+        {
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
