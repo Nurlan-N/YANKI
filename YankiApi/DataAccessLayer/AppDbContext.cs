@@ -24,6 +24,7 @@ namespace YankiApi.DataAccessLayer
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly)
             modelBuilder.ApplyConfiguration(new SettingConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

@@ -4,6 +4,55 @@
         <name>YankiApi</name>
     </assembly>
     <members>
+        <member name="M:YankiApi.Controllers.V1.CategoryController.Post(YankiApi.DTOs.CategoryDTOs.CategoryPostDto)">
+             <summary>
+             Create Category
+             </summary>
+              <remarks>
+             Sample request:
+            
+                 POST api/category
+                 {
+                    "Name": "Test",
+                    "İmage": "Test"
+                 }
+            
+             </remarks>
+             <param name="product"></param>
+             <returns>A newly created  setting Id</returns> 
+             <response code="400">Object Invalid</response>
+             <response code="409">Name Already Exist</response>
+             <response code="201">Name Already Exist</response>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.CategoryController.Get">
+            <summary>
+            Get All Category
+            </summary>
+            <param></param>
+            <returns></returns>
+            <response code="400">Object Invalid</response>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.CategoryController.Get(System.Int32)">
+            <summary>
+            Get Category For ID
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.CategoryController.Put(YankiApi.DTOs.CategoryDTOs.CategoryUpdateDto)">
+            <summary>
+            Update Category
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.CategoryController.Delete(System.Int32)">
+            <summary>
+            Delete Category
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.Post(YankiApi.DTOs.ProductDTOs.ProductPostDto)">
              <summary>
              Create Product
@@ -51,6 +100,13 @@
             </summary>
             <param name="id"></param>
             <param name="productUpdateDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.ProductController.Delete(System.Int32)">
+            <summary>
+            Delete Product
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="M:YankiApi.Controllers.V1.SettingsController.Post(YankiApi.DTOs.SettingDTOs.SettingPostDto)">
@@ -105,6 +161,41 @@
             <response code="400">Object Invalid</response>
             <response code="404">Not Found</response>
             <response code="204">No Content</response>
+        </member>
+        <member name="T:YankiApi.DTOs.CategoryDTOs.CategoryPostDto">
+            <summary>
+            Create Product
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.CategoryDTOs.CategoryPostDto.Name">
+            <summary>
+            Category Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.CategoryDTOs.CategoryPostDto.Image">
+            <summary>
+            Category Image 
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.CategoryDTOs.CategoryPostDto.ImageFile">
+            <summary>
+            Category Image File
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.CategoryDTOs.CategoryUpdateDto.Name">
+            <summary>
+            Category Title
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.CategoryDTOs.CategoryUpdateDto.Image">
+            <summary>
+            Category Image
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.CategoryDTOs.CategoryUpdateDto.ImageFile">
+            <summary>
+            Category Image File
+            </summary>
         </member>
         <member name="T:YankiApi.DTOs.ProductDTOs.ProductPostDto">
             <summary>

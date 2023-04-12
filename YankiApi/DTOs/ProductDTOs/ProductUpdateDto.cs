@@ -63,23 +63,21 @@ namespace YankiApi.DTOs.ProductDTOs
         /// Product Category Id
         /// </summary>
         public int CategoryId { get; set; }
-        public DateTime UpdatetAt { get; private set; }
-        public string UpdatetBy { get; private set; }
 
         public class ProductUpdateDtoValidation : AbstractValidator<ProductUpdateDto>
         {
             public ProductUpdateDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment)
             {
-               
+
                 RuleFor(r => r).Custom(async (r, validate) =>
                 {
-                    
 
-                    if (r.Id == null ) validate.AddFailure("Yalnis ID");
 
-                    Product dbProduct = await context.Products
-                        .Include(p => p.ProductImages.Where(pImages => pImages.IsDeleted == false))
-                        .FirstOrDefaultAsync(c => c.Id == r.Id && c.IsDeleted == false);
+                    if (r.Id == null) validate.AddFailure("Yalnis ID");
+
+                    Product dbProduct = context.Products
+                        .Include(p => p.ProductImages.Where(pImages => !pImages.IsDeleted))
+                        .FirstOrDefault(c => c.Id == r.Id && c.IsDeleted == false);
 
                     if (dbProduct == null) validate.AddFailure("Yalnis ID");
 
@@ -128,19 +126,21 @@ namespace YankiApi.DTOs.ProductDTOs
 
                         dbProduct.Image = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "product");
                     }
+                    if (r.Title != null) { dbProduct.Title = r.Title; }
                     if (r.Price != null) { dbProduct.Price = r.Price; }
+                    if (r.Image != null) { dbProduct.Image = r.Image; }
+                    if (r.ProductImages != null) { dbProduct.ProductImages = r.ProductImages; }
                     if (r.DiscountedPrice != null) { dbProduct.DiscountedPrice = r.DiscountedPrice; }
                     if (r.Count != null) { dbProduct.Count = r.Count; }
                     if (r.ExTax != null) { dbProduct.ExTax = r.ExTax; }
                     if (r.Description != null) { dbProduct.Description = r.Description; }
 
-                    r.UpdatetAt = DateTime.UtcNow.AddDays(4);
-                    r.UpdatetBy = "Admin";
-                    await context.SaveChangesAsync();
-                   
+                    dbProduct.UpdatetAt = DateTime.UtcNow.AddDays(4);
+                    dbProduct.UpdatetBy = "Admin";
+
                 });
 
-               
+
             }
         }
             

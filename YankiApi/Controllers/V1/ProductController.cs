@@ -108,6 +108,29 @@ namespace YankiApi.Controllers.V1
         [Produces("application/json")]
         public async Task<IActionResult> Put([FromForm]ProductUpdateDto productUpdateDto)
         {
+            
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+        /// <summary>
+        /// Delete Product
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id == null) { return BadRequest(); }
+
+            Product product = await _context.Products.FirstOrDefaultAsync(p => !p.IsDeleted && p.Id == id);
+
+            if (product == null) { return NotFound(); }
+
+            product.IsDeleted = true;
+            product.DeletedBy = "System";
+            product.DeletedAt = DateTime.UtcNow.AddHours(4);
+
             await _context.SaveChangesAsync();
 
             return Ok();
