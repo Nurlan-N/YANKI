@@ -12,6 +12,9 @@ namespace YankiApi.DTOs.ProductDTOs
 {
     public class ProductUpdateDto
     {
+        /// <summary>
+        /// Product Id
+        /// </summary>
         public int Id { get; set; }
         /// <summary>
         /// Product Title
@@ -20,19 +23,19 @@ namespace YankiApi.DTOs.ProductDTOs
         /// <summary>
         /// Product Price
         /// </summary>
-        public double Price { get; set; }
+        public double? Price { get; set; }
         /// <summary>
         /// Product DiscountPrice
         /// </summary>
-        public double DiscountedPrice { get; set; }
+        public double? DiscountedPrice { get; set; }
         /// <summary>
         /// Product Extax
         /// </summary>
-        public double ExTax { get; set; }
+        public double? ExTax { get; set; }
         /// <summary>
         /// Product Count
         /// </summary>
-        public int Count { get; set; }
+        public int? Count { get; set; }
         /// <summary>
         /// Product Description
         /// </summary>
@@ -62,11 +65,11 @@ namespace YankiApi.DTOs.ProductDTOs
         /// <summary>
         /// Product Category Id
         /// </summary>
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         public class ProductUpdateDtoValidation : AbstractValidator<ProductUpdateDto>
         {
-            public ProductUpdateDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment)
+            public ProductUpdateDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor _contextAccessor)
             {
 
                 RuleFor(r => r).Custom(async (r, validate) =>
@@ -114,9 +117,9 @@ namespace YankiApi.DTOs.ProductDTOs
                     //StartImageFile
                     if (r.ImageFile != null)
                     {
-                        if (!r.ImageFile.CheckFileContentType("image/jpeg"))
+                        if (!r.ImageFile.CheckFileContentType("image/png"))
                         {
-                            validate.AddFailure("MainFile", "Main File Yalniz JPG Formatda ola biler");
+                            validate.AddFailure("Product Image", "Image File Yalniz PNG Formatda ola biler");
                         }
                         if (!r.ImageFile.CheckFileLength(300))
                         {
@@ -124,15 +127,22 @@ namespace YankiApi.DTOs.ProductDTOs
                         }
                         FileHelpers.DeleteFile(dbProduct.Image, webHostEnvironment, "assets", "img", "product");
 
-                        dbProduct.Image = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "product");
+                        var requestContext = _contextAccessor?.HttpContext?.Request;
+                        var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";
+
+
+
+                        string img = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "category");
+                        r.Image = baseUrl + $"/assets/img/category/{img}";
                     }
                     if (r.Title != null) { dbProduct.Title = r.Title; }
-                    if (r.Price != null) { dbProduct.Price = r.Price; }
+                    if (r.Image != null) { dbProduct.Image = r.Image; }
+                    if (r.Price != null) { dbProduct.Price = (double)r.Price; }
                     if (r.Image != null) { dbProduct.Image = r.Image; }
                     if (r.ProductImages != null) { dbProduct.ProductImages = r.ProductImages; }
-                    if (r.DiscountedPrice != null) { dbProduct.DiscountedPrice = r.DiscountedPrice; }
-                    if (r.Count != null) { dbProduct.Count = r.Count; }
-                    if (r.ExTax != null) { dbProduct.ExTax = r.ExTax; }
+                    if (r.DiscountedPrice != null) { dbProduct.DiscountedPrice = (double)r.DiscountedPrice; }
+                    if (r.Count != null) { dbProduct.Count = (int)r.Count; }
+                    if (r.ExTax != null) { dbProduct.ExTax = (double)r.ExTax; }
                     if (r.Description != null) { dbProduct.Description = r.Description; }
 
                     dbProduct.UpdatetAt = DateTime.UtcNow.AddDays(4);

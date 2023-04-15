@@ -72,7 +72,7 @@ namespace YankiApi.DTOs.ProductDTOs
     public class ProductPostDtoValidation : AbstractValidator<ProductPostDto>
     {
 
-        public ProductPostDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment)
+        public ProductPostDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment,IHttpContextAccessor _contextAccessor)
         {
             RuleFor(p => p.Title)
                 .MaximumLength(200).WithMessage("Max 200 simvol")
@@ -93,9 +93,9 @@ namespace YankiApi.DTOs.ProductDTOs
                 }
                 else
                 {
-                    if (!r.ImageFile.CheckFileContentType("image/jpeg"))
+                    if (!r.ImageFile.CheckFileContentType("image/png"))
                     {
-                        validate.AddFailure("ImageFile", "ImageFile File Yalniz JPG Formatda ola biler");
+                        validate.AddFailure("ImageFile", "ImageFile File Yalniz PNG Formatda ola biler");
                     }
 
                     if (!r.ImageFile.CheckFileLength(300))
@@ -103,7 +103,11 @@ namespace YankiApi.DTOs.ProductDTOs
                         validate.AddFailure("ImageFile", "ImageFile File Yalniz 300Kb  ola biler");
                     }
 
-                    r.Image = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "product");
+                    var requestContext = _contextAccessor?.HttpContext?.Request;
+                    var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";
+
+                     var img = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "product");
+                    r.Image = baseUrl + $"/assets/img/product/{img}";
                 }
 
                 if (r?.Files?.Count() <= 6)
@@ -138,7 +142,7 @@ namespace YankiApi.DTOs.ProductDTOs
                     validate.AddFailure("Files", "max 6 shekil");
                 }
 
-                string code = r.Title[..2] + context.Categories.FirstOrDefault(c => c.Id == r.CategoryId).Name[..1];
+                string code = r?.Title[..2] + context.Categories.FirstOrDefault(c => c.Id == r.CategoryId).Name[..1];
             });
         }
 

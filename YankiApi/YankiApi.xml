@@ -262,6 +262,11 @@
             Product Category Id
             </summary>
         </member>
+        <member name="P:YankiApi.DTOs.ProductDTOs.ProductUpdateDto.Id">
+            <summary>
+            Product Id
+            </summary>
+        </member>
         <member name="P:YankiApi.DTOs.ProductDTOs.ProductUpdateDto.Title">
             <summary>
             Product Title
@@ -335,6 +340,51 @@
         <member name="P:YankiApi.DTOs.SettingDTOs.SettingPostDto.Value">
             <summary>
             Setting Value
+            </summary>
+        </member>
+        <member name="T:YankiApi.Entities.AppUser">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.SurName">
+            <summary>
+            Surname
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.LastOnline">
+            <summary>
+            Online
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.Addresses">
+            <summary>
+            Address
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.Orders">
+            <summary>
+            Orders
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.Reviews">
+            <summary>
+            Review
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.Baskets">
+            <summary>
+            Basket
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.Wishlist">
+            <summary>
+            Wishlist
             </summary>
         </member>
     </members>

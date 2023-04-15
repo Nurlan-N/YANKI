@@ -30,7 +30,7 @@ namespace YankiApi.DTOs.CategoryDTOs
 
         public class CategoryPostDtoValidation : AbstractValidator<CategoryPostDto>
         {
-            public CategoryPostDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment)
+            public CategoryPostDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment,IHttpContextAccessor _contextAccessor)
             {
                 RuleFor(r => r).Custom(async (r, validate) =>
                 {
@@ -55,7 +55,13 @@ namespace YankiApi.DTOs.CategoryDTOs
                             validate.AddFailure("ImageFile", "ImageFile File Yalniz 300Kb  ola biler");
                         }
 
-                        r.Image = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "category");
+                        var requestContext = _contextAccessor?.HttpContext?.Request;
+                        var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";
+
+                        
+
+                        string img = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "category");
+                        r.Image = baseUrl + $"/assets/img/product/{img}";
                     }
                     r.Name = r.Name.Trim();
                 });

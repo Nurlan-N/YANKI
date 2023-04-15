@@ -28,7 +28,7 @@ namespace YankiApi.DTOs.CategoryDTOs
 
         public class CategoryUpdateDtoValidatio : AbstractValidator<CategoryUpdateDto>
         {
-            public CategoryUpdateDtoValidatio(AppDbContext context, IWebHostEnvironment webHostEnvironment)
+            public CategoryUpdateDtoValidatio(AppDbContext context, IWebHostEnvironment webHostEnvironment,IHttpContextAccessor _contextAccessor)
             {
                 RuleFor(r => r).Custom(async (r, validate) =>
                 {
@@ -39,9 +39,9 @@ namespace YankiApi.DTOs.CategoryDTOs
                     if (category == null) validate.AddFailure("Yalnis ID");
                     if (r.ImageFile != null)
                     {
-                        if (!r.ImageFile.CheckFileContentType("image/jpeg"))
+                        if (!r.ImageFile.CheckFileContentType("image/png"))
                         {
-                            validate.AddFailure("MainFile", "Main File Yalniz JPG Formatda ola biler");
+                            validate.AddFailure("MainFile", "Main File Yalniz PNG Formatda ola biler");
                         }
                         if (!r.ImageFile.CheckFileLength(300))
                         {
@@ -49,11 +49,18 @@ namespace YankiApi.DTOs.CategoryDTOs
                         }
                         FileHelpers.DeleteFile(category.Image, webHostEnvironment, "assets", "img", "category");
 
-                        category.Image = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "category");
+                        var requestContext = _contextAccessor?.HttpContext?.Request;
+                        var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";
+
+
+
+                        string img = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "category");
+                        r.Image = baseUrl + $"/assets/img/category/{img}";
+                        category.Image = r.Image;
                     }
                     category.UpdatetAt = DateTime.UtcNow.AddDays(4);
                     category.UpdatetBy = "Admin";
-                    category.Name = r.Name.Trim();
+                    category.Name = (r.Name != null) ? r.Name.Trim() : category.Name;
                 });
             }
         }

@@ -12,8 +12,8 @@ using YankiApi.DataAccessLayer;
 namespace YankiApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230411085239_UpdateCategoryTableV2")]
-    partial class UpdateCategoryTableV2
+    [Migration("20230413181015_updateCategoryV2")]
+    partial class updateCategoryV2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -199,10 +199,14 @@ namespace YankiApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("System");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -212,13 +216,16 @@ namespace YankiApi.Migrations
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("UpdatetAt")
                         .HasColumnType("datetime2");

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace YankiApi.Migrations
 {
-    public partial class UpdateCategoryV3 : Migration
+    public partial class updateCategoryV2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,15 +19,6 @@ namespace YankiApi.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)",
                 oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Image",
-                table: "Categories",
-                type: "nvarchar(250)",
-                maxLength: 250,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
@@ -48,24 +39,27 @@ namespace YankiApi.Migrations
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
                 oldNullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Image",
+                table: "Categories",
+                type: "nvarchar(250)",
+                maxLength: 250,
+                nullable: false,
+                defaultValue: "");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "Image",
+                table: "Categories");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Categories",
                 type: "nvarchar(max)",
                 nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(250)",
-                oldMaxLength: 250);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Image",
-                table: "Categories",
-                type: "nvarchar(max)",
-                nullable: false,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(250)",
                 oldMaxLength: 250);
