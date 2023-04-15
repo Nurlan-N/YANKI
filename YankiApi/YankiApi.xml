@@ -4,6 +4,31 @@
         <name>YankiApi</name>
     </assembly>
     <members>
+        <member name="T:YankiApi.Controllers.V1.AuthController">
+            <summary>
+            Authorize Controller
+            </summary>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.AuthController.Register(YankiApi.DTOs.AuthDTOs.RegisterDto)">
+            <summary>
+            Register Action
+            </summary>
+            <param name="registerDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.AuthController.Login(YankiApi.DTOs.AuthDTOs.LoginDto)">
+            <summary>
+            Login Action
+            </summary>
+            <param name="loginDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.AuthController.ReadToken">
+            <summary>
+            Email
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:YankiApi.Controllers.V1.CategoryController.Post(YankiApi.DTOs.CategoryDTOs.CategoryPostDto)">
              <summary>
              Create Category

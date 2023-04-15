@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using YankiApi.DTOs.AuthDTOs;
 using YankiApi.DTOs.CategoryDTOs;
 using YankiApi.DTOs.ProductDTOs;
 using YankiApi.DTOs.SettingDTOs;
@@ -17,6 +18,8 @@ namespace YankiApi.Profiles
             CreateMap<Product, ProductGetDto>();
             CreateMap<ProductUpdateDto, Product>();
             CreateMap<CategoryPostDto, Category>();
+            CreateMap<RegisterDto, AppUser>();
+            CreateMap<LoginDto, AppUser>();
 
 
         }
