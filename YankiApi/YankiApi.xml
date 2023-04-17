@@ -104,7 +104,7 @@
              <response code="409">Name Already Exist</response>
              <response code="201">Name Already Exist</response>
         </member>
-        <member name="M:YankiApi.Controllers.V1.ProductController.Get">
+        <member name="M:YankiApi.Controllers.V1.ProductController.Get(System.Nullable{System.Int32})">
             <summary>
             Get All Product
             </summary>
@@ -125,6 +125,13 @@
             </summary>
             <param name="id"></param>
             <param name="productUpdateDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.ProductController.Search(System.String)">
+            <summary>
+            Search Product
+            </summary>
+            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.Delete(System.Int32)">
@@ -186,6 +193,71 @@
             <response code="400">Object Invalid</response>
             <response code="404">Not Found</response>
             <response code="204">No Content</response>
+        </member>
+        <member name="T:YankiApi.DTOs.AuthDTOs.LoginDto">
+            <summary>
+            Log in
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.LoginDto.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.LoginDto.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="T:YankiApi.DTOs.AuthDTOs.LoginDtoValidator">
+            <summary>
+            Validator
+            </summary>
+        </member>
+        <member name="M:YankiApi.DTOs.AuthDTOs.LoginDtoValidator.#ctor">
+            <summary>
+            Yoxlamalar
+            </summary>
+        </member>
+        <member name="T:YankiApi.DTOs.AuthDTOs.RegisterDto">
+            <summary>
+            Register
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.SurName">
+            <summary>
+            Last Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.UserName">
+            <summary>
+            Nick
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="T:YankiApi.DTOs.AuthDTOs.RegisterDtoValidator">
+            <summary>
+            Validator
+            </summary>
+        </member>
+        <member name="M:YankiApi.DTOs.AuthDTOs.RegisterDtoValidator.#ctor">
+            <summary>
+            Check
+            </summary>
         </member>
         <member name="T:YankiApi.DTOs.CategoryDTOs.CategoryPostDto">
             <summary>

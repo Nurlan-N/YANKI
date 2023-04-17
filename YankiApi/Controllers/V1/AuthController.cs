@@ -110,8 +110,10 @@ namespace YankiApi.Controllers.V1
             JwtSecurityToken test = (JwtSecurityToken)jwtSecurityTokenHandler.ReadToken(token);
 
             var email = test.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
+            var name = test.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
 
-            return Ok(email);
+            var data = new { email, name };
+            return Ok(data);
         }
 
 

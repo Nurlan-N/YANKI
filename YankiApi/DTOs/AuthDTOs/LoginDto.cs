@@ -2,14 +2,28 @@
 
 namespace YankiApi.DTOs.AuthDTOs
 {
+    /// <summary>
+    /// Log in
+    /// </summary>
     public class LoginDto
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        /// <summary>
+        /// Email
+        /// </summary>
+        public string? Email { get; set; }
+        /// <summary>
+        /// Password
+        /// </summary>
+        public string? Password { get; set; }
     }
+    /// <summary>
+    /// Validator
+    /// </summary>
     public class LoginDtoValidator : AbstractValidator<LoginDto>
     {
-
+        /// <summary>
+        /// Yoxlamalar
+        /// </summary>
         public LoginDtoValidator()
         {
             RuleFor(r => r.Email)

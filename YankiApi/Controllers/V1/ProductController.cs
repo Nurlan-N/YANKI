@@ -50,7 +50,7 @@ namespace YankiApi.Controllers.V1
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [Produces("application/json")]
-        public async Task<IActionResult> Post([FromForm]ProductPostDto productPostDto)
+        public async Task<IActionResult> Post([FromForm] ProductPostDto productPostDto)
         {
             Product product = _mapper.Map<Product>(productPostDto);
             await _context.Products.AddAsync(product);
@@ -65,9 +65,17 @@ namespace YankiApi.Controllers.V1
         /// <returns></returns>
         /// <response code="400">Object Invalid</response>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int? categoryId)
         {
-            return Ok(await _context.Products.Where(s => !s.IsDeleted).ToListAsync());
+            if (categoryId != null && categoryId > 0)
+            {
+                return Ok(await _context.Products.Where(s => !s.IsDeleted && s.CategoryId == categoryId).ToListAsync());
+
+            }
+            else
+            {
+                return Ok(await _context.Products.Where(s => !s.IsDeleted).ToListAsync());
+            }
         }
 
         /// <summary>
@@ -106,13 +114,33 @@ namespace YankiApi.Controllers.V1
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [Produces("application/json")]
-        public async Task<IActionResult> Put([FromForm]ProductUpdateDto productUpdateDto)
+        public async Task<IActionResult> Put([FromForm] ProductUpdateDto productUpdateDto)
         {
-            
+
             await _context.SaveChangesAsync();
 
             return Ok();
         }
+
+        /// <summary>
+        /// Search Product
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("search")]
+        public async Task<IActionResult> Search(string search)
+        {
+            if (search != null)
+            {
+                return Ok(await _context.Products
+                .Where(p => p.IsDeleted == false && p.Title.ToLower().Contains(search.ToLower())).ToListAsync());
+            }else { return BadRequest(); }
+            
+        }
+
+
+
         /// <summary>
         /// Delete Product
         /// </summary>
