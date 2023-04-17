@@ -78,6 +78,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:YankiApi.Controllers.V1.ProductController.#ctor(YankiApi.DataAccessLayer.AppDbContext,AutoMapper.IMapper)">
+            <summary>
+            Context and Mapper
+            </summary>
+            <param name="context"></param>
+            <param name="mapper"></param>
+        </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.Post(YankiApi.DTOs.ProductDTOs.ProductPostDto)">
              <summary>
              Create Product
@@ -104,7 +111,7 @@
              <response code="409">Name Already Exist</response>
              <response code="201">Name Already Exist</response>
         </member>
-        <member name="M:YankiApi.Controllers.V1.ProductController.Get(System.Nullable{System.Int32})">
+        <member name="M:YankiApi.Controllers.V1.ProductController.Get(System.Int32,System.Int32,System.Nullable{System.Int32})">
             <summary>
             Get All Product
             </summary>

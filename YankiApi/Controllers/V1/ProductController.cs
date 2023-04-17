@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Drawing.Printing;
 using YankiApi.DataAccessLayer;
 using YankiApi.DTOs.ProductDTOs;
 using YankiApi.DTOs.SettingDTOs;
@@ -16,6 +18,11 @@ namespace YankiApi.Controllers.V1
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Context and Mapper
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="mapper"></param>
         public ProductController(AppDbContext context, IMapper mapper)
         {
             _context = context;
@@ -65,17 +72,23 @@ namespace YankiApi.Controllers.V1
         /// <returns></returns>
         /// <response code="400">Object Invalid</response>
         [HttpGet]
-        public async Task<IActionResult> Get(int? categoryId)
+        public async Task<IActionResult> Get(int page, int limit, int? categoryId)
         {
+            var query = _context.Products.Where(s => !s.IsDeleted);
+
             if (categoryId != null && categoryId > 0)
             {
-                return Ok(await _context.Products.Where(s => !s.IsDeleted && s.CategoryId == categoryId).ToListAsync());
+                query = query.Where(s => s.CategoryId == categoryId);
+            }
 
-            }
-            else
+            var products = new
             {
-                return Ok(await _context.Products.Where(s => !s.IsDeleted).ToListAsync());
-            }
+                product = await query.Skip((page - 1) * limit).Take(limit).ToListAsync(),
+                count = await query.CountAsync(),
+            };
+
+
+            return Ok(products);
         }
 
         /// <summary>
