@@ -15,13 +15,9 @@ namespace YankiApi.DTOs.ProductDTOs
         public string? Seria { get; set; }
         public int Code { get; set; }
         public string? Image { get; set; }
-        [NotMapped]
-        public IEnumerable<IFormFile>? Files { get; set; }
         public IEnumerable<Basket>? Baskets { get; set; }
         public IEnumerable<Review>? Reviews { get; set; }
         public List<ProductImage>? ProductImages { get; set; }
-        [NotMapped]
-        public IFormFile? ImageFile { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
     }

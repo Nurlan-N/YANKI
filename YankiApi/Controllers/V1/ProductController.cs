@@ -104,7 +104,7 @@ namespace YankiApi.Controllers.V1
                 return BadRequest("Id boşdur.");
             }
 
-            var product = await _context.Products
+            Product product = await _context.Products
                 .FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
 
             if (product == null)
@@ -112,7 +112,7 @@ namespace YankiApi.Controllers.V1
                 return NotFound($"Id uyğunsuzdur: {id}");
             }
 
-            var productGetDto = _mapper.Map<ProductGetDto>(product);
+            ProductGetDto productGetDto = _mapper.Map<ProductGetDto>(product);
 
             return Ok(productGetDto);
         }

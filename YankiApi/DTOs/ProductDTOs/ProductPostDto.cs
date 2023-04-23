@@ -93,15 +93,15 @@ namespace YankiApi.DTOs.ProductDTOs
                 }
                 else
                 {
-                    if (!r.ImageFile.CheckFileContentType("image/png"))
-                    {
-                        validate.AddFailure("ImageFile", "ImageFile File Yalniz PNG Formatda ola biler");
-                    }
+                    //if (!r.ImageFile.CheckFileContentType("image/svg"))
+                    //{
+                    //    validate.AddFailure("ImageFile", "ImageFile File Yalniz SVG Formatda ola biler");
+                    //}
 
-                    if (!r.ImageFile.CheckFileLength(300))
-                    {
-                        validate.AddFailure("ImageFile", "ImageFile File Yalniz 300Kb  ola biler");
-                    }
+                    //if (!r.ImageFile.CheckFileLength(300))
+                    //{
+                    //    validate.AddFailure("ImageFile", "ImageFile File Yalniz 300Kb  ola biler");
+                    //}
 
                     var requestContext = _contextAccessor?.HttpContext?.Request;
                     var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";

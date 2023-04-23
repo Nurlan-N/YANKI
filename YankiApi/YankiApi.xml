@@ -23,9 +23,9 @@
             <param name="loginDto"></param>
             <returns></returns>
         </member>
-        <member name="M:YankiApi.Controllers.V1.AuthController.ReadToken">
+        <member name="M:YankiApi.Controllers.V1.AuthController.Profile">
             <summary>
-            Email
+            ReadToken
             </summary>
             <returns></returns>
         </member>
@@ -200,6 +200,32 @@
             <response code="400">Object Invalid</response>
             <response code="404">Not Found</response>
             <response code="204">No Content</response>
+        </member>
+        <member name="T:YankiApi.Controllers.V1.WishlistController">
+            <summary>
+            Wishlist
+            </summary>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.WishlistController.#ctor(YankiApi.DataAccessLayer.AppDbContext,AutoMapper.IMapper,Microsoft.AspNetCore.Identity.UserManager{YankiApi.Entities.AppUser})">
+            <summary>
+            Context , Mapper and UserManager
+            </summary>
+            <param name="context"></param>
+            <param name="mapper"></param>
+            <param name="userManager"></param>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.WishlistController.Get">
+            <summary>
+            Get Wishlist Product
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.WishlistController.Delete(System.Nullable{System.Int32})">
+            <summary>
+            Delete Wishlist Item
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="T:YankiApi.DTOs.AuthDTOs.LoginDto">
             <summary>
@@ -444,6 +470,61 @@
         <member name="P:YankiApi.DTOs.SettingDTOs.SettingPostDto.Value">
             <summary>
             Setting Value
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistDeleteDto.Id">
+            <summary>
+            Product Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistDeleteDto.Image">
+            <summary>
+            Product Image
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistDeleteDto.Title">
+            <summary>
+            Product Title
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistDeleteDto.Price">
+            <summary>
+            Product Price
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistDeleteDto.Count">
+            <summary>
+            Product Count
+            </summary>
+        </member>
+        <member name="T:YankiApi.DTOs.WishlistDTOs.WishlistPostDto">
+            <summary>
+            Wishlist Post
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistPostDto.Id">
+            <summary>
+            Product Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistPostDto.Image">
+            <summary>
+            Product Image
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistPostDto.Title">
+            <summary>
+            Product Title
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistPostDto.Price">
+            <summary>
+            Product Price
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistPostDto.Count">
+            <summary>
+            Product Count
             </summary>
         </member>
         <member name="T:YankiApi.Entities.AppUser">
