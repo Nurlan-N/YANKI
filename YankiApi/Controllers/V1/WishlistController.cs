@@ -54,6 +54,9 @@ namespace YankiApi.Controllers.V1
                 return NotFound();
             }
 
+            HttpContext.Response.Cookies.Equals("wishlist");
+
+
             string wishlist = HttpContext.Request.Cookies["wishlist"];
 
             List<WishlistPostDto> wishlistDto = null;
@@ -110,21 +113,7 @@ namespace YankiApi.Controllers.V1
 
             HttpContext.Response.Cookies.Append("wishlist", wishlist);
 
-            //foreach (WishlistVM wishlistVM in wishlistVMs)
-            //{
-            //    Product product = await _context.Products
-            //        .FirstOrDefaultAsync(p => p.Id == wishlistVM.Id && p.IsDeleted == false);
 
-            //    if (product != null)
-            //    {
-            //        wishlistVM.Price = product.DiscountedPrice > 0 ? product.DiscountedPrice : product.Price;
-            //        wishlistVM.Title = product.Title;
-            //        wishlistVM.Image = product.Image;
-            //    }
-
-            //}
-
-            //return PartialView("_WishlistPartial", wishlistVMs);
             return Ok();
 
         }
@@ -148,7 +137,7 @@ namespace YankiApi.Controllers.V1
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadJwtToken(token);
 
-            
+
 
             var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -162,7 +151,7 @@ namespace YankiApi.Controllers.V1
 
             var products = await _context.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
 
-            return Ok(products);
+                return Ok(products);
         }
         /// <summary>
         /// Delete Wishlist Item
@@ -172,7 +161,7 @@ namespace YankiApi.Controllers.V1
         [HttpDelete]
         [Route("delete")]
         [Produces("application/json")]
-         public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) { return BadRequest(); }
 
@@ -182,43 +171,38 @@ namespace YankiApi.Controllers.V1
             }
             string wishlist = HttpContext.Request.Cookies["wishlist"];
 
-            List<WishlistDeleteDto> wishlistVMs = null;
-            if (string.IsNullOrWhiteSpace(wishlist))
+            List<WishlistDeleteDto>? wishlistVMs = null;
+
+            wishlistVMs = JsonConvert.DeserializeObject<List<WishlistDeleteDto>>(wishlist);
+            if (wishlistVMs.Exists(b => b.Id == id))
             {
-                return BadRequest();
+                WishlistDeleteDto newWishlist = wishlistVMs.Find(b => b.Id == id);
+                wishlistVMs.Remove(newWishlist);
+                wishlist = JsonConvert.SerializeObject(wishlistVMs);
+                HttpContext.Response.Cookies.Append("wishlist", wishlist);
             }
             else
             {
-                wishlistVMs = JsonConvert.DeserializeObject<List<WishlistDeleteDto>>(wishlist);
-                if (wishlistVMs.Exists(b => b.Id == id))
+                return NotFound();
+            }
+            foreach (WishlistDeleteDto wishlistVM in wishlistVMs)
+            {
+                Product product = await _context.Products
+                    .FirstOrDefaultAsync(p => p.Id == wishlistVM.Id && p.IsDeleted == false);
+
+                if (product != null)
                 {
-                    WishlistDeleteDto newWishlist = wishlistVMs.Find(b => b.Id == id);
-                    wishlistVMs.Remove(newWishlist);
-                    wishlist = JsonConvert.SerializeObject(wishlistVMs);
-                    HttpContext.Response.Cookies.Append("wishlist", wishlist);
+                    wishlistVM.Price = product.DiscountedPrice > 0 ? product.DiscountedPrice : product.Price;
+                    wishlistVM.Title = product.Title;
+                    wishlistVM.Image = product.Image;
                 }
-                else
-                {
-                    return NotFound();
-                }
-                foreach (WishlistDeleteDto wishlistVM in wishlistVMs)
-                {
-                    Product product = await _context.Products
-                        .FirstOrDefaultAsync(p => p.Id == wishlistVM.Id && p.IsDeleted == false);
-
-                    if (product != null)
-                    {
-                        wishlistVM.Price = product.DiscountedPrice > 0 ? product.DiscountedPrice : product.Price;
-                        wishlistVM.Title = product.Title;
-                        wishlistVM.Image = product.Image;
-                    }
-
-                }
-
-
-                return Ok();
 
             }
+
+
+            return Ok();
+
+
         }
 
     }
