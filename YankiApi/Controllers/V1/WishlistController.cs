@@ -38,7 +38,11 @@ namespace YankiApi.Controllers.V1
             _mapper = mapper;
             _userManager = userManager;
         }
-
+        /// <summary>
+        /// Add Wishlist Item
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("add")]
         [ProducesResponseType(201)]
@@ -49,72 +53,40 @@ namespace YankiApi.Controllers.V1
         {
             if (id == null) { return BadRequest(); }
 
-            if (!await _context.Products.AnyAsync(p => p.IsDeleted == false && p.Id == id))
+            if (!await _context.Products.AnyAsync(p => !p.IsDeleted && p.Id == id))
             {
                 return NotFound();
             }
 
-            HttpContext.Response.Cookies.Equals("wishlist");
-
-
-            string wishlist = HttpContext.Request.Cookies["wishlist"];
-
-            List<WishlistPostDto> wishlistDto = null;
-
-
-            if (string.IsNullOrWhiteSpace(wishlist))
+            List<Wishlist> wishlists = await _context.Wishlists.ToListAsync();
+            if (wishlists.Any(w => w.ProductId == id))
             {
-                wishlistDto = new List<WishlistPostDto>
-                {
-                    new WishlistPostDto { Id = (int)id, Count = 1 }
-                };
-
-
+                return BadRequest();
             }
-            else
-            {
-                wishlistDto = JsonConvert.DeserializeObject<List<WishlistPostDto>>(wishlist);
 
-                if (wishlistDto.Exists(b => b.Id == id))
-                {
-                    wishlistDto.Find(b => b.Id == id).Count += 1;
-                }
-                else
-                {
-                    wishlistDto.Add(new WishlistPostDto { Id = (int)id, Count = 1 });
-                }
-
-            }
             if (User.Identity.IsAuthenticated)
             {
                 AppUser appUser = await _userManager.Users.Include(u => u.Wishlist.Where(b => !b.IsDeleted)).FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
 
                 if (appUser.Wishlist.Any(b => b.ProductId == id))
                 {
-                    appUser.Wishlist.FirstOrDefault(b => b.ProductId == id).Count = (int)wishlistDto.FirstOrDefault(b => b.Id == id).Count;
+                    appUser.Wishlist.FirstOrDefault(b => b.ProductId == id).Count = wishlists.FirstOrDefault(b => b.Id == id).Count;
                 }
                 else
                 {
                     Wishlist dbWishlist = new()
                     {
                         ProductId = id,
-                        Count = (int)wishlistDto.FirstOrDefault(b => b.Id == id).Count,
+                        Count = 1,
                     };
 
                     appUser.Wishlist.Add(dbWishlist);
                     await _context.SaveChangesAsync();
 
                 }
-
-
             }
-
-            wishlist = JsonConvert.SerializeObject(wishlistDto);
-
-            HttpContext.Response.Cookies.Append("wishlist", wishlist);
-
-
             return Ok();
+
 
         }
 
@@ -151,59 +123,48 @@ namespace YankiApi.Controllers.V1
 
             var products = await _context.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
 
-                return Ok(products);
+            return Ok(products);
         }
+
+
+
+
+
         /// <summary>
         /// Delete Wishlist Item
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("delete")]
-        [Produces("application/json")]
-        public async Task<IActionResult> Delete(int? id)
+        [Route("delete/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null) { return BadRequest(); }
+            Wishlist wishlist = await _context.Wishlists.FirstOrDefaultAsync(w => w.ProductId == id);
 
-            if (!await _context.Products.AnyAsync(p => p.IsDeleted == false && p.Id == id))
-            {
-                return NotFound();
-            }
-            string wishlist = HttpContext.Request.Cookies["wishlist"];
+            if (wishlist == null) { return NotFound(); }
 
-            List<WishlistDeleteDto>? wishlistVMs = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                AppUser appUser = await _userManager.Users.Include(u => u.Wishlist.Where(w => !w.IsDeleted)).FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
 
-            wishlistVMs = JsonConvert.DeserializeObject<List<WishlistDeleteDto>>(wishlist);
-            if (wishlistVMs.Exists(b => b.Id == id))
-            {
-                WishlistDeleteDto newWishlist = wishlistVMs.Find(b => b.Id == id);
-                wishlistVMs.Remove(newWishlist);
-                wishlist = JsonConvert.SerializeObject(wishlistVMs);
-                HttpContext.Response.Cookies.Append("wishlist", wishlist);
-            }
-            else
-            {
-                return NotFound();
-            }
-            foreach (WishlistDeleteDto wishlistVM in wishlistVMs)
-            {
-                Product product = await _context.Products
-                    .FirstOrDefaultAsync(p => p.Id == wishlistVM.Id && p.IsDeleted == false);
+                Wishlist userWishlist = appUser.Wishlist.FirstOrDefault(w => w.ProductId == id);
 
-                if (product != null)
-                {
-                    wishlistVM.Price = product.DiscountedPrice > 0 ? product.DiscountedPrice : product.Price;
-                    wishlistVM.Title = product.Title;
-                    wishlistVM.Image = product.Image;
-                }
+                if (userWishlist == null) { return BadRequest(); }
+
+                _context.Wishlists.Remove(wishlist);
+                await _context.SaveChangesAsync();
 
             }
-
-
-            return Ok();
-
-
+            return NoContent();
         }
+
+
+
+
 
     }
 }

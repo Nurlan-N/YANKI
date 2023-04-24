@@ -2,10 +2,19 @@
 using YankiApi.Enums;
 
 namespace YankiApi.Entities
-{
+{   
+    /// <summary>
+    /// 
+    /// </summary>
     public class Order : BaseEntity
-    {
+    {   
+        /// <summary>
+        /// 
+        /// </summary>
         public AppUser? User { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public string? UserId { get; set; }
         public int No { get; set; }
         public IEnumerable<OrderItem>? OrderItems { get; set; }

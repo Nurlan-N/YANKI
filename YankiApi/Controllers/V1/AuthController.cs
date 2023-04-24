@@ -77,6 +77,7 @@ namespace YankiApi.Controllers.V1
 
             var role = await _userManager.GetRolesAsync(appUser);
             var userId = await _userManager.GetUserIdAsync(appUser);
+            Address address = await _context.Addresses.Where(a => a.UserId == userId).FirstOrDefaultAsync();
             List<Wishlist> wishlist = await _context.Wishlists.Where(w => w.UserId == userId).ToListAsync();
             string wishlistCoocies = null;
 
@@ -110,12 +111,17 @@ namespace YankiApi.Controllers.V1
                 new Claim(ClaimTypes.Name,appUser.UserName),
                 new Claim(ClaimTypes.NameIdentifier,appUser.Id),
                 new Claim(ClaimTypes.Email,appUser.Email),
+                new Claim(ClaimTypes.Surname,appUser.SurName),
+                new Claim(ClaimTypes.Country,address.Country),
+                new Claim(ClaimTypes.MobilePhone,address?.Phone),
+                new Claim(ClaimTypes.PostalCode,address.PostalCode),
             };
             foreach (var r in role)
             {
                 Claim claim = new Claim(ClaimTypes.Role, r);
                 claims.Add(claim);
             }
+            
 
             SymmetricSecurityKey key = new(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("JwtSetting:SecretKey").Value));
 
@@ -146,8 +152,12 @@ namespace YankiApi.Controllers.V1
             var email = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var name = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             var role = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            var phone = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value;
+            var postalcode = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.PostalCode)?.Value;
+            var surname = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+            var country = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Country)?.Value;
 
-            var data = new { email, name, role };
+            var data = new { email, name, role,phone,postalcode,surname,country };
             return Ok(data);
         }
 

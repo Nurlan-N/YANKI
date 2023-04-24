@@ -214,13 +214,20 @@
             <param name="mapper"></param>
             <param name="userManager"></param>
         </member>
+        <member name="M:YankiApi.Controllers.V1.WishlistController.Post(System.Nullable{System.Int32})">
+            <summary>
+            Add Wishlist Item
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:YankiApi.Controllers.V1.WishlistController.Get">
             <summary>
             Get Wishlist Product
             </summary>
             <returns></returns>
         </member>
-        <member name="M:YankiApi.Controllers.V1.WishlistController.Delete(System.Nullable{System.Int32})">
+        <member name="M:YankiApi.Controllers.V1.WishlistController.Delete(System.Int32)">
             <summary>
             Delete Wishlist Item
             </summary>
