@@ -26,6 +26,18 @@ namespace YankiApi.Entities
         /// </summary>
         public IEnumerable<Address>? Addresses { get; set; }
         /// <summary>
+        /// User Phone
+        /// </summary>
+        public string? Phone { get; set; }
+        /// <summary>
+        /// User Country
+        /// </summary>
+        public string? Country { get; set; }
+        /// <summary>
+        /// User PostalCode
+        /// </summary>
+        public string? PostalCode { get; set; }
+        /// <summary>
         /// Orders
         /// </summary>
         public IEnumerable<Order>? Orders { get; set; }

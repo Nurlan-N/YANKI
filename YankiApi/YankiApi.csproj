@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>C:\Users\nazar_pmfa4rf\Desktop\YANKI\YankiApi\YankiApi.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\MSI\Desktop\YankiApi\YankiApi\YankiApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

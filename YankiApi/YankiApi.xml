@@ -29,6 +29,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:YankiApi.Controllers.V1.AuthController.UpdateUser(YankiApi.DTOs.AuthDTOs.UserDto)">
+            <summary>
+            Update User Action
+            </summary>
+            <param name="userDto"></param>
+            <returns></returns>
+        </member>
         <member name="M:YankiApi.Controllers.V1.CategoryController.Post(YankiApi.DTOs.CategoryDTOs.CategoryPostDto)">
              <summary>
              Create Category
@@ -299,6 +306,16 @@
             Check
             </summary>
         </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.UserDto.Phone">
+            <summary>
+            User Phone
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.UserDto.Country">
+            <summary>
+            User Country
+            </summary>
+        </member>
         <member name="T:YankiApi.DTOs.CategoryDTOs.CategoryPostDto">
             <summary>
             Create Product
@@ -559,6 +576,21 @@
             Address
             </summary>
         </member>
+        <member name="P:YankiApi.Entities.AppUser.Phone">
+            <summary>
+            User Phone
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.Country">
+            <summary>
+            User Country
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.AppUser.PostalCode">
+            <summary>
+            User PostalCode
+            </summary>
+        </member>
         <member name="P:YankiApi.Entities.AppUser.Orders">
             <summary>
             Orders
@@ -577,6 +609,21 @@
         <member name="P:YankiApi.Entities.AppUser.Wishlist">
             <summary>
             Wishlist
+            </summary>
+        </member>
+        <member name="T:YankiApi.Entities.Order">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.User">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.UserId">
+            <summary>
+            
             </summary>
         </member>
     </members>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,14 +29,16 @@ namespace YankiApi.Controllers.V1
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _config;
         private readonly AppDbContext _context;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AuthController(RoleManager<IdentityRole> roleManager, IMapper mapper, UserManager<AppUser> userManager, IConfiguration configuration, AppDbContext context)
+        public AuthController(RoleManager<IdentityRole> roleManager, IMapper mapper, UserManager<AppUser> userManager, IConfiguration configuration, AppDbContext context, SignInManager<AppUser> signInManager)
         {
             _roleManager = roleManager;
             _mapper = mapper;
             _userManager = userManager;
             _config = configuration;
             _context = context;
+            _signInManager = signInManager;
         }
 
 
@@ -121,7 +124,7 @@ namespace YankiApi.Controllers.V1
                 Claim claim = new Claim(ClaimTypes.Role, r);
                 claims.Add(claim);
             }
-            
+
 
             SymmetricSecurityKey key = new(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("JwtSetting:SecretKey").Value));
 
@@ -139,6 +142,7 @@ namespace YankiApi.Controllers.V1
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize]
         [Route("profile")]
         [Produces("application/json")]
         public IActionResult Profile()
@@ -157,21 +161,57 @@ namespace YankiApi.Controllers.V1
             var surname = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
             var country = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Country)?.Value;
 
-            var data = new { email, name, role,phone,postalcode,surname,country };
+            var data = new { email, name, role, phone, postalcode, surname, country };
             return Ok(data);
         }
 
+        /// <summary>
+        /// Update User Action
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("updateuser")]
+        [Produces("application/json")]
+        public async Task<IActionResult> UpdateUser(UserDto userDto)
+        {
+            // Get the current user's ID from the JWT token
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        //    [HttpGet]
-        //    [Route("createRole")]
-        //    public async Task<IActionResult> CreateRole()
-        //    {   
-        //        await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
-        //        await _roleManager.CreateAsync(new IdentityRole("Admin"));
-        //        await _roleManager.CreateAsync(new IdentityRole("Member"));
+            // Check if the user exists
+            AppUser user = await _userManager.FindByIdAsync(currentUserId);
 
-        //        return Ok();
-        //    }
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // Update the user's information
+            user.Name = userDto.Name;
+            user.SurName = userDto.SurName;
+            user.UserName = userDto.UserName;
+            user.Email = userDto.Email;
+            user.PhoneNumber = userDto.Phone;
+            user.Country = userDto.Country;
+            user.PostalCode = userDto.PostalCode;
+
+            // Change the user's password if a new one was provided
+            if (!string.IsNullOrEmpty(userDto.Password))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                await _userManager.ResetPasswordAsync(user, token, userDto.Password);
+            }
+
+            // Save the changes to the database
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest(result.Errors);
+        }
 
     }
 }
