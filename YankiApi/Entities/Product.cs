@@ -54,10 +54,6 @@ namespace YankiApi.Entities
         [NotMapped]
         public IEnumerable<IFormFile>? Files { get; set; }
         /// <summary>
-        /// Product Baskets
-        /// </summary>
-        public IEnumerable<Basket>? Baskets { get; set; }
-        /// <summary>
         /// Product Reviews
         /// </summary>
         public IEnumerable<Review>? Reviews { get; set; }

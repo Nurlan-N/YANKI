@@ -8,7 +8,6 @@ using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using YankiApi.DataAccessLayer;
-using YankiApi.DTOs.ProductDTOs;
 using YankiApi.Entities;
 
 namespace YankiApi.Controllers.V1
@@ -64,7 +63,7 @@ namespace YankiApi.Controllers.V1
 
                 if (appUser.Baskets.Any(b => b.ProductId == id))
                 {
-                    appUser.Baskets.FirstOrDefault(b => b.ProductId == id).Count = baskets.FirstOrDefault(b => b.ProductId == id).Count;
+                    return Ok();
                 }
                 else
                 {
@@ -136,7 +135,6 @@ namespace YankiApi.Controllers.V1
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             Basket basket = await _context.Baskets.FirstOrDefaultAsync(w => w.ProductId == id);

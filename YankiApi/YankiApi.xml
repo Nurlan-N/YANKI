@@ -706,11 +706,6 @@
             Product Image File
             </summary>
         </member>
-        <member name="P:YankiApi.Entities.Product.Baskets">
-            <summary>
-            Product Baskets
-            </summary>
-        </member>
         <member name="P:YankiApi.Entities.Product.Reviews">
             <summary>
             Product Reviews
