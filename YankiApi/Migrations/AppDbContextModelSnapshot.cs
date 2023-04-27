@@ -209,7 +209,7 @@ namespace YankiApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.AppUser", b =>
@@ -339,7 +339,7 @@ namespace YankiApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Baskets");
+                    b.ToTable("Baskets", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.Category", b =>
@@ -387,7 +387,7 @@ namespace YankiApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.Order", b =>
@@ -462,7 +462,7 @@ namespace YankiApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.OrderItem", b =>
@@ -512,7 +512,7 @@ namespace YankiApi.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.Product", b =>
@@ -591,7 +591,7 @@ namespace YankiApi.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.ProductImage", b =>
@@ -634,7 +634,7 @@ namespace YankiApi.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.Review", b =>
@@ -687,7 +687,7 @@ namespace YankiApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.Setting", b =>
@@ -735,7 +735,7 @@ namespace YankiApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("YankiApi.Entities.Wishlist", b =>
@@ -782,7 +782,7 @@ namespace YankiApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Wishlists");
+                    b.ToTable("Wishlists", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

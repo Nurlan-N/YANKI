@@ -11,19 +11,17 @@ namespace YankiApi.DTOs.AuthDTOs
         public string? SurName { get; set; }
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [Required]
-        public string UserName { get; set; }
-        [Required, StringLength(20)]
-        [DataType(DataType.Password)]
-        public string? OldPassword { get; set; }
-
+        public string? UserName { get; set; }
         [Required, StringLength(20)]
         [DataType(DataType.Password)]
         public string? Password { get; set; }
-        [Required, StringLength(20)]
+
         [DataType(DataType.Password)]
-        [Compare("Password")]
+        public string? NewPassword { get; set; }
+        [DataType(DataType.Password)]
+        [Compare("NewPassword")]
         public string? ConfirimPassword { get; set; }
         /// <summary>
         /// User Phone

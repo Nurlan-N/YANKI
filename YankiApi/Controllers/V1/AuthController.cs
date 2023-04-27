@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -80,7 +81,6 @@ namespace YankiApi.Controllers.V1
 
             var role = await _userManager.GetRolesAsync(appUser);
             var userId = await _userManager.GetUserIdAsync(appUser);
-            Address address = await _context.Addresses.Where(a => a.UserId == userId).FirstOrDefaultAsync();
             List<Wishlist> wishlist = await _context.Wishlists.Where(w => w.UserId == userId).ToListAsync();
             string wishlistCoocies = null;
 
@@ -111,13 +111,14 @@ namespace YankiApi.Controllers.V1
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name,appUser.UserName),
+                new Claim(ClaimTypes.Name,appUser.Name),
+                new Claim(ClaimTypes.GivenName,appUser.UserName),
                 new Claim(ClaimTypes.NameIdentifier,appUser.Id),
                 new Claim(ClaimTypes.Email,appUser.Email),
                 new Claim(ClaimTypes.Surname,appUser.SurName),
-                new Claim(ClaimTypes.Country,address.Country),
-                new Claim(ClaimTypes.MobilePhone,address?.Phone),
-                new Claim(ClaimTypes.PostalCode,address.PostalCode),
+                new Claim(ClaimTypes.Country,appUser.Country),
+                new Claim(ClaimTypes.MobilePhone,appUser.Phone),
+                new Claim(ClaimTypes.PostalCode,appUser.PostalCode),
             };
             foreach (var r in role)
             {
@@ -155,13 +156,14 @@ namespace YankiApi.Controllers.V1
 
             var email = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var name = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var username = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
             var role = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             var phone = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value;
             var postalcode = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.PostalCode)?.Value;
             var surname = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
             var country = test?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Country)?.Value;
 
-            var data = new { email, name, role, phone, postalcode, surname, country };
+            var data = new { email, name, role, phone, postalcode, surname, country, username };
             return Ok(data);
         }
 
@@ -175,10 +177,8 @@ namespace YankiApi.Controllers.V1
         [Produces("application/json")]
         public async Task<IActionResult> UpdateUser(UserDto userDto)
         {
-            // Get the current user's ID from the JWT token
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // Check if the user exists
             AppUser user = await _userManager.FindByIdAsync(currentUserId);
 
             if (user == null)
@@ -186,28 +186,65 @@ namespace YankiApi.Controllers.V1
                 return Unauthorized();
             }
 
-            // Update the user's information
-            user.Name = userDto.Name;
-            user.SurName = userDto.SurName;
-            user.UserName = userDto.UserName;
-            user.Email = userDto.Email;
-            user.PhoneNumber = userDto.Phone;
-            user.Country = userDto.Country;
-            user.PostalCode = userDto.PostalCode;
+            user.Name = userDto.Name != null && userDto.Name != "" ? userDto.Name : user.Name;
+            user.UserName = userDto.UserName != null && userDto.UserName != "" ? userDto.UserName : user.UserName;
+            user.SurName = userDto.SurName != null && userDto.SurName != "" ? userDto.SurName : user.SurName;
+            user.UserName = userDto.UserName != null && userDto.UserName != "" ? userDto.UserName : user.UserName;
+            user.Email = userDto.Email != null && userDto.Email != "" ? userDto.Email : user.Email;
+            user.PhoneNumber = userDto.Phone != null && userDto.Phone != "" ? userDto.Phone : user.Phone;
+            user.Country = userDto.Country != null && userDto.Country != "" ? userDto.Country : user.Country;
+            user.PostalCode = userDto.PostalCode != null && userDto.PostalCode != "" ? userDto.PostalCode : user.PostalCode;
 
-            // Change the user's password if a new one was provided
+            if (!await _userManager.CheckPasswordAsync(user, userDto.Password))
+            {
+                return BadRequest();
+            }
             if (!string.IsNullOrEmpty(userDto.Password))
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 await _userManager.ResetPasswordAsync(user, token, userDto.Password);
             }
 
-            // Save the changes to the database
             var result = await _userManager.UpdateAsync(user);
+            var role = await _userManager.GetRolesAsync(user);
+
 
             if (result.Succeeded)
             {
-                return Ok();
+                // Retrieve the user's claims from the JWT token
+                
+                
+                List<Claim> userClaims = new ()
+            {
+                new Claim(ClaimTypes.Name,user.Name),
+                new Claim(ClaimTypes.GivenName,user.UserName),
+                new Claim(ClaimTypes.NameIdentifier,user.Id),
+                new Claim(ClaimTypes.Email,user.Email),
+                new Claim(ClaimTypes.Surname,user.SurName),
+                new Claim(ClaimTypes.Country,user.Country),
+                new Claim(ClaimTypes.MobilePhone,user?.PhoneNumber),
+                new Claim(ClaimTypes.PostalCode,user.PostalCode),
+            };
+                foreach (var r in role)
+                {
+                    Claim claim = new (ClaimTypes.Role, (string)r);
+                    userClaims.Add(claim);
+                }
+
+                // Generate a new token with a new expiration time, using the same user claims
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("JwtSetting:SecretKey").Value));
+                var signing = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var expires = DateTime.Now.AddDays(Convert.ToDouble(_config["Jwt:ExpireDays"]));
+                var token = new JwtSecurityToken(
+                    _config["Jwt:Issuer"],
+                    _config["Jwt:Issuer"],
+                    userClaims,
+                    expires: expires,
+                    signingCredentials: signing
+                );
+
+                // Return the new token to the client
+                return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(token) });
             }
 
             return BadRequest(result.Errors);

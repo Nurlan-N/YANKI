@@ -127,7 +127,7 @@ namespace YankiApi.Controllers.V1
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [Produces("application/json")]
-        public async Task<IActionResult> Put([FromForm] ProductUpdateDto productUpdateDto)
+        public async Task<IActionResult> Put(ProductUpdateDto productUpdateDto)
         {
 
             await _context.SaveChangesAsync();

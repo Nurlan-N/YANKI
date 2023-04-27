@@ -36,6 +36,31 @@
             <param name="userDto"></param>
             <returns></returns>
         </member>
+        <member name="T:YankiApi.Controllers.V1.BasketController">
+            <summary>
+            Wishlist
+            </summary>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.BasketController.Post(System.Nullable{System.Int32})">
+            <summary>
+            Add Basket Item
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.BasketController.Get">
+            <summary>
+            Get Basket Products
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.BasketController.Delete(System.Int32)">
+            <summary>
+            Delete Wishlist Item
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:YankiApi.Controllers.V1.CategoryController.Post(YankiApi.DTOs.CategoryDTOs.CategoryPostDto)">
              <summary>
              Create Category
@@ -624,6 +649,91 @@
         <member name="P:YankiApi.Entities.Order.UserId">
             <summary>
             
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Title">
+            <summary>
+            Product Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Price">
+            <summary>
+            Product price
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.DiscountedPrice">
+            <summary>
+            Product Discount Price
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.ExTax">
+            <summary>
+            Product Extax
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Count">
+            <summary>
+            Product Count
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Description">
+            <summary>
+            Product Description
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.LongDescription">
+            <summary>
+            Product Long Description
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Seria">
+            <summary>
+            Product Seria
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Code">
+            <summary>
+            Product Code
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Image">
+            <summary>
+            Product Image
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Files">
+            <summary>
+            Product Image File
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Baskets">
+            <summary>
+            Product Baskets
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Reviews">
+            <summary>
+            Product Reviews
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.ProductImages">
+            <summary>
+            Product Imagess
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.ImageFile">
+            <summary>
+            Product Images Files
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.CategoryId">
+            <summary>
+            Product Category Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Product.Category">
+            <summary>
+            Product Category
             </summary>
         </member>
     </members>
