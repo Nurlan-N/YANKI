@@ -110,6 +110,11 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="T:YankiApi.Controllers.V1.OrderController">
+            <summary>
+            Order Controller
+            </summary>
+        </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.#ctor(YankiApi.DataAccessLayer.AppDbContext,AutoMapper.IMapper)">
             <summary>
             Context and Mapper

@@ -57,6 +57,8 @@ namespace YankiApi.Controllers.V1
                 baskets.Find(b => b.ProductId == id).Count += 1;
             }
 
+            Product product = await _context.Products.FirstOrDefaultAsync(p => !p.IsDeleted && p.Id == id);
+
             if (User.Identity.IsAuthenticated)
             {
                 AppUser appUser = await _userManager.Users.Include(u => u.Baskets.Where(b => !b.IsDeleted)).FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
@@ -71,6 +73,7 @@ namespace YankiApi.Controllers.V1
                     {
                         ProductId = id,
                         Count = 1,
+                        Price = (int)product.Price
                     };
 
                     appUser.Baskets.Add(dbBasket);
@@ -107,23 +110,13 @@ namespace YankiApi.Controllers.V1
             {
                 return Unauthorized();
             }
-
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve
-            };
-
-            //var baskets = await _context.Baskets
-            //    //.Include(b => b.Product)
-            //    .Where(w => w.UserId == userId && !w.IsDeleted)
-            //    .ToListAsync();
+           
             List<Basket> baskets = await _context.Baskets.Where(w => w.UserId == userId && !w.IsDeleted).ToListAsync();
             var productIds = baskets.Select(w => w.ProductId).ToList();
 
             var products = await _context.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
 
             return Ok(products);
-           // return Ok(System.Text.Json.JsonSerializer.Serialize(baskets, options));
         }
         /// <summary>
         /// Delete Wishlist Item
@@ -157,8 +150,6 @@ namespace YankiApi.Controllers.V1
         }
 
 
-        //var productIds = baskets.Select(w => w.ProductId).ToList();
-
-        //var products = await _context.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
+        
     }
 }

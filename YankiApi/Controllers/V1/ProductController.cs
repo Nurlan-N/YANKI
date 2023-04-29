@@ -57,7 +57,7 @@ namespace YankiApi.Controllers.V1
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [Produces("application/json")]
-        public async Task<IActionResult> Post([FromForm] ProductPostDto productPostDto)
+        public async Task<IActionResult> Post(ProductPostDto productPostDto)
         {
             Product product = _mapper.Map<Product>(productPostDto);
             await _context.Products.AddAsync(product);

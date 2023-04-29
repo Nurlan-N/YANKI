@@ -116,9 +116,9 @@ namespace YankiApi.Controllers.V1
                 new Claim(ClaimTypes.NameIdentifier,appUser.Id),
                 new Claim(ClaimTypes.Email,appUser.Email),
                 new Claim(ClaimTypes.Surname,appUser.SurName),
-                new Claim(ClaimTypes.Country,appUser.Country),
-                new Claim(ClaimTypes.MobilePhone,appUser.Phone),
-                new Claim(ClaimTypes.PostalCode,appUser.PostalCode),
+                new Claim(ClaimTypes.Country,(appUser.Country != null ? appUser.Country : "Azerbaijan")),
+                new Claim(ClaimTypes.MobilePhone,(appUser.Phone != null? appUser.Phone : "+994")),
+                new Claim(ClaimTypes.PostalCode,(appUser.PostalCode !=null ? appUser.PostalCode : "5000")),
             };
             foreach (var r in role)
             {

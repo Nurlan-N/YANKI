@@ -58,11 +58,7 @@ namespace YankiApi.Controllers.V1
                 return NotFound();
             }
 
-            List<Wishlist> wishlists = await _context.Wishlists.ToListAsync();
-            if (wishlists.Any(w => w.ProductId == id))
-            {
-                return BadRequest();
-            }
+            
 
             if (User.Identity.IsAuthenticated)
             {
@@ -70,7 +66,7 @@ namespace YankiApi.Controllers.V1
 
                 if (appUser.Wishlist.Any(b => b.ProductId == id))
                 {
-                    appUser.Wishlist.FirstOrDefault(b => b.ProductId == id).Count = wishlists.FirstOrDefault(b => b.Id == id).Count;
+                    return Ok();
                 }
                 else
                 {
@@ -125,9 +121,6 @@ namespace YankiApi.Controllers.V1
 
             return Ok(products);
         }
-
-
-
 
 
         /// <summary>

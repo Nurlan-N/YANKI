@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\BasketDTOs\" />
     <Folder Include="wwwroot\assets\img\category\" />
     <Folder Include="wwwroot\assets\img\product\" />
   </ItemGroup>
