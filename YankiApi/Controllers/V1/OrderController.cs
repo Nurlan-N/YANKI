@@ -33,7 +33,32 @@ namespace YankiApi.Controllers.V1
             _userManager = userManager;
             _mapper = mapper;
         }
+        [HttpGet]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetOrder()
+        {
+            var authHeader = HttpContext.Request.Headers["Authorization"];
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.ToString().StartsWith("Bearer "))
+            {
+                return Unauthorized();
+            }
 
+            var token = authHeader.ToString().Split(' ')[1];
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+            var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+            List<Order> orders = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .Where(o => o.UserId == userId)
+                .ToListAsync();
+
+            return Ok(orders);
+        }
 
         [HttpPost]
         [Route("checkout")]
@@ -69,15 +94,18 @@ namespace YankiApi.Controllers.V1
                 Country = orderDto.Country,
                 Phone = orderDto.Phone,
                 PostalCode = orderDto.Postalcode,
+                TotalPrice = orderItems.Sum(o => o.Price),
                 Name = orderDto.Name,
                 SurName = orderDto.Surname,
+                Email = orderDto.Email,
                 No = (appUser.Orders?.Count() ?? 0) > 0 ? appUser.Orders.Last().No + 1 : 1,
                 OrderItems = orderItems,
                 CreatedAt = DateTime.UtcNow.AddHours(4),
                 CreatedBy = $"{appUser.Name} {appUser.SurName}"
-
+                
+                
             };
-           
+
 
             foreach (Basket basket in appUser.Baskets)
             {

@@ -26,6 +26,7 @@ namespace YankiApi.Entities
         public string? City { get; set; }
         public string? Address { get; set; }
         public string? PostalCode { get; set; }
+        public double? TotalPrice { get; set; }
         public string? State { get; set; }
         public OrderType Status { get; set; }
         public string? Commet { get; set; }

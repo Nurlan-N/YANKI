@@ -72,6 +72,9 @@ namespace YankiApi.Controllers.V1
         /// <returns></returns>
         /// <response code="400">Object Invalid</response>
         [HttpGet]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [Produces("application/json")]
         public async Task<IActionResult> Get(int page, int limit, int? categoryId)
         {
             var query = _context.Products.Where(s => !s.IsDeleted);
