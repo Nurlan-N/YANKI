@@ -41,10 +41,6 @@ namespace YankiApi.DTOs.ProductDTOs
         /// </summary>
         public string? Description { get; set; }
         /// <summary>
-        /// Product Long Description
-        /// </summary>
-        public string? LongDescription { get; set; }
-        /// <summary>
         /// Product Image
         /// </summary>
         public string? Image { get; set; }
@@ -95,14 +91,6 @@ namespace YankiApi.DTOs.ProductDTOs
                         List<ProductImage> productImages = new List<ProductImage>();
                         foreach (IFormFile file in r.Files)
                         {
-                            if (!file.CheckFileContentType("image/jpeg"))
-                            {
-                                validate.AddFailure("file", "Main File Yalniz JPG Formatda ola biler");
-                            }
-                            if (!file.CheckFileLength(300))
-                            {
-                                validate.AddFailure("file", "Main File Yalniz 300Kb  ola biler");
-                            }
                             ProductImage productImage = new ProductImage()
                             {
                                 Image = await file.CreateFileAsync(webHostEnvironment, "assets", "img", "product"),
@@ -117,14 +105,6 @@ namespace YankiApi.DTOs.ProductDTOs
                     //StartImageFile
                     if (r.ImageFile != null)
                     {
-                        if (!r.ImageFile.CheckFileContentType("image/png"))
-                        {
-                            validate.AddFailure("Product Image", "Image File Yalniz PNG Formatda ola biler");
-                        }
-                        if (!r.ImageFile.CheckFileLength(300))
-                        {
-                            validate.AddFailure("MainFile", "Main File Yalniz 300Kb  ola biler");
-                        }
                         FileHelpers.DeleteFile(dbProduct.Image, webHostEnvironment, "assets", "img", "product");
 
                         var requestContext = _contextAccessor?.HttpContext?.Request;

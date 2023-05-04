@@ -8,8 +8,8 @@ namespace YankiApi.Configuration
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.Property(b => b.Name).HasMaxLength(250).IsRequired(true);
-            builder.Property(b => b.Image).HasMaxLength(250).IsRequired(true);
+            builder.Property(b => b.Name).HasMaxLength(250);
+            builder.Property(b => b.Image).HasMaxLength(250);
             builder.Property(b => b.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
             builder.Property(b => b.CreatedBy).HasDefaultValue("System");
         }

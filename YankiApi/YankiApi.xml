@@ -481,11 +481,6 @@
             Product Description
             </summary>
         </member>
-        <member name="P:YankiApi.DTOs.ProductDTOs.ProductUpdateDto.LongDescription">
-            <summary>
-            Product Long Description
-            </summary>
-        </member>
         <member name="P:YankiApi.DTOs.ProductDTOs.ProductUpdateDto.Image">
             <summary>
             Product Image

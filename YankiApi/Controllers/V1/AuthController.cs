@@ -131,7 +131,7 @@ namespace YankiApi.Controllers.V1
 
             SigningCredentials signing = new(key, SecurityAlgorithms.HmacSha256Signature);
 
-            JwtSecurityToken token = new(claims: claims, signingCredentials: signing, expires: DateTime.UtcNow.AddHours(4));
+            JwtSecurityToken token = new(claims: claims, signingCredentials: signing, expires: DateTime.UtcNow.AddHours(24));
 
             JwtSecurityTokenHandler handler = new();
 

@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using YankiApi.DataAccessLayer;
 using YankiApi.DTOs.CategoryDTOs;
 using YankiApi.DTOs.ProductDTOs;
 using YankiApi.Entities;
+using YankiApi.Extentions;
+using YankiApi.Helpers;
 
 namespace YankiApi.Controllers.V1
 {
@@ -15,11 +20,15 @@ namespace YankiApi.Controllers.V1
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public CategoryController(AppDbContext context, IMapper mapper)
+        public CategoryController(AppDbContext context, IMapper mapper, IHttpContextAccessor contextAccessor, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -97,17 +106,70 @@ namespace YankiApi.Controllers.V1
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Roles = "SuperAdmin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
+        [Route("update-category")]
         [Produces("application/json")]
         public async Task<IActionResult> Put([FromForm] CategoryUpdateDto dto)
-        {
+            {
+            //if (dto == null || dto.Id == null)
+            //{
+            //    return BadRequest();
+            //}
+
+            //Category dbCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == dto.Id);
+            //if (dbCategory == null) return NotFound();
+            //if (dto.ImageFile != null)
+            //{
+
+            //    if (!dto.ImageFile.CheckFileLength(3000))
+            //    {
+            //        return BadRequest();
+            //    }
+            //    FileHelpers.DeleteFile(dbCategory.Image, _webHostEnvironment, "assets", "img", "category");
+
+            //    var requestContext = _contextAccessor?.HttpContext?.Request;
+            //    var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";
+
+
+
+            //    string img = await dto.ImageFile.CreateFileAsync(_webHostEnvironment, "assets", "img", "category");
+            //    dto.Image = baseUrl + $"/assets/img/category/{img}";
+            //    dbCategory.Image = dto.Image;
+            //}
+            //dbCategory.UpdatetAt = DateTime.UtcNow.AddDays(4);
+            //dbCategory.UpdatetBy = "Admin";
+            //dbCategory.Name = (dto.Name != null) ? dto.Name.Trim() : dbCategory.Name;
+
 
             await _context.SaveChangesAsync();
 
             return Ok();
         }
+
+        ///// <summary>
+        ///// Update Category
+        ///// </summary>
+        ///// <param name="dto"></param>
+        ///// <returns></returns>
+        //[HttpPut("update")]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(404)]
+        //[Produces("application/json")]
+        //public async Task<IActionResult> Put([FromBody] CategoryUpdateDto dto)
+        //{
+
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok();
+        //}
+
+
+
+
         /// <summary>
         /// Delete Category
         /// </summary>

@@ -23,27 +23,23 @@ namespace YankiApi.DTOs.CategoryDTOs
         /// <summary>
         /// Category Image File
         /// </summary>
-        [NotMapped]
         public IFormFile? ImageFile { get; set; }
 
         public class CategoryUpdateDtoValidatio : AbstractValidator<CategoryUpdateDto>
         {
-            public CategoryUpdateDtoValidatio(AppDbContext context, IWebHostEnvironment webHostEnvironment,IHttpContextAccessor _contextAccessor)
+            public CategoryUpdateDtoValidatio(AppDbContext context, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor _contextAccessor)
             {
                 RuleFor(r => r).Custom(async (r, validate) =>
                 {
                     if (r.Id == null) validate.AddFailure("Yalnis ID");
 
-                    Category category =  context.Categories.FirstOrDefault(c => c.Id == r.Id && !c.IsDeleted );
+                    Category category = context.Categories.FirstOrDefault(c => c.Id == r.Id && !c.IsDeleted);
 
                     if (category == null) validate.AddFailure("Yalnis ID");
                     if (r.ImageFile != null)
                     {
-                        if (!r.ImageFile.CheckFileContentType("image/png"))
-                        {
-                            validate.AddFailure("MainFile", "Main File Yalniz PNG Formatda ola biler");
-                        }
-                        if (!r.ImageFile.CheckFileLength(300))
+
+                        if (!r.ImageFile.CheckFileLength(3000))
                         {
                             validate.AddFailure("MainFile", "Main File Yalniz 300Kb  ola biler");
                         }

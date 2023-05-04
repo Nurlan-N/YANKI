@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -126,6 +127,7 @@ namespace YankiApi.Controllers.V1
         /// <param name="productUpdateDto"></param>
         /// <returns></returns>
         [HttpPut]
+        [Route("update")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
