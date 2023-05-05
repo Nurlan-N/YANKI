@@ -16,6 +16,7 @@ namespace YankiApi.DTOs.ProductDTOs
         public string? Seria { get; set; }
         public int Code { get; set; }
         public string? Image { get; set; }
+        
         public IEnumerable<Basket>? Baskets { get; set; }
         public IEnumerable<Review>? Reviews { get; set; }
         public List<ProductImage>? ProductImages { get; set; }

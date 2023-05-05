@@ -45,12 +45,7 @@ namespace YankiApi.DTOs.CategoryDTOs
                     }
                     else
                     {
-                        if (!r.ImageFile.CheckFileContentType("image/jpeg"))
-                        {
-                            validate.AddFailure("ImageFile", "ImageFile File Yalniz JPG Formatda ola biler");
-                        }
-
-                        if (!r.ImageFile.CheckFileLength(300))
+                        if (!r.ImageFile.CheckFileLength(3000))
                         {
                             validate.AddFailure("ImageFile", "ImageFile File Yalniz 300Kb  ola biler");
                         }
@@ -61,7 +56,7 @@ namespace YankiApi.DTOs.CategoryDTOs
                         
 
                         string img = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "category");
-                        r.Image = baseUrl + $"/assets/img/product/{img}";
+                        r.Image = baseUrl + $"/assets/img/category/{img}";
                     }
                     r.Name = r.Name.Trim();
                 });

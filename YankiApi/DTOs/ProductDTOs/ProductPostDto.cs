@@ -93,16 +93,6 @@ namespace YankiApi.DTOs.ProductDTOs
                 }
                 else
                 {
-                    //if (!r.ImageFile.CheckFileContentType("image/svg"))
-                    //{
-                    //    validate.AddFailure("ImageFile", "ImageFile File Yalniz SVG Formatda ola biler");
-                    //}
-
-                    //if (!r.ImageFile.CheckFileLength(300))
-                    //{
-                    //    validate.AddFailure("ImageFile", "ImageFile File Yalniz 300Kb  ola biler");
-                    //}
-
                     var requestContext = _contextAccessor?.HttpContext?.Request;
                     var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";
 
@@ -114,20 +104,17 @@ namespace YankiApi.DTOs.ProductDTOs
                 {
                     if (r.Files is not null && r.Files.Count() > 0)
                     {
-                        List<ProductImage> productImages = new();
+                        var requestContext = _contextAccessor?.HttpContext?.Request;
+                        var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";
+
+                        List<ProductImage> productImages = new List<ProductImage>();
                         foreach (IFormFile file in r.Files)
                         {
-                            if (!file.CheckFileContentType("image/jpeg"))
+                            var img = await file.CreateFileAsync(webHostEnvironment, "assets", "img", "product");
+
+                            ProductImage productImage = new ()
                             {
-                                validate.AddFailure("file", "Main File Yalniz JPG Formatda ola biler");
-                            }
-                            if (!file.CheckFileLength(300))
-                            {
-                                validate.AddFailure("file", "Main File Yalniz 300Kb  ola biler");
-                            }
-                            ProductImage productImage = new()
-                            {
-                                Image = await file.CreateFileAsync(webHostEnvironment, "assets", "img", "product"),
+                                Image = baseUrl + $"/assets/img/product/{img}",
                                 CreatedAt = DateTime.UtcNow.AddDays(4),
                                 CreatedBy = "System"
                             };
@@ -142,7 +129,6 @@ namespace YankiApi.DTOs.ProductDTOs
                     validate.AddFailure("Files", "max 6 shekil");
                 }
 
-                string code = r?.Title[..2] + context.Categories.FirstOrDefault(c => c.Id == r.CategoryId).Name[..1];
             });
         }
 

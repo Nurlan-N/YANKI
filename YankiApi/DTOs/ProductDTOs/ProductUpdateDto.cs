@@ -88,18 +88,23 @@ namespace YankiApi.DTOs.ProductDTOs
                     }
                     if (r.Files != null && r.Files.Count() > 0)
                     {
-                        List<ProductImage> productImages = new List<ProductImage>();
+                        var requestContext = _contextAccessor?.HttpContext?.Request;
+                        var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";
+
+                        List<ProductImage> productImages = new ();
                         foreach (IFormFile file in r.Files)
                         {
-                            ProductImage productImage = new ProductImage()
+                            var img = await file.CreateFileAsync(webHostEnvironment, "assets", "img", "product");
+
+                            ProductImage productImage = new ()
                             {
-                                Image = await file.CreateFileAsync(webHostEnvironment, "assets", "img", "product"),
+                                Image = baseUrl + $"/assets/img/product/{img}",
                                 CreatedAt = DateTime.UtcNow.AddDays(4),
                                 CreatedBy = "System"
                             };
                             productImages.Add(productImage);
                         }
-
+                        
                         dbProduct.ProductImages.AddRange(productImages);
                     }
                     //StartImageFile
@@ -112,7 +117,7 @@ namespace YankiApi.DTOs.ProductDTOs
 
 
 
-                        string img = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "category");
+                        string img = await r.ImageFile.CreateFileAsync(webHostEnvironment, "assets", "img", "product");
                         r.Image = baseUrl + $"/assets/img/category/{img}";
                     }
                     if (r.Title != null) { dbProduct.Title = r.Title; }
