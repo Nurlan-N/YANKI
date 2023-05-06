@@ -15,6 +15,9 @@ using YankiApi.Helpers;
 
 namespace YankiApi.Controllers.V1
 {
+    /// <summary>
+    /// Product CRUD
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -39,19 +42,6 @@ namespace YankiApi.Controllers.V1
         /// </summary>
         ///  <remarks>
         /// Sample request:
-        ///
-        ///     POST api/product
-        ///     {
-        ///        "Title": "Test",
-        ///        "Price": "50"
-        ///        "DiscountPrice": "40"
-        ///        "Extax": "10"
-        ///        "Count": "40"
-        ///        "Description": "Test"
-        ///        "Seria": "Test"
-        ///        "İmage": "Test"
-        ///     }
-        ///
         /// </remarks>
         /// <param name="product"></param>
         /// <returns>A newly created  setting Id</returns> 
@@ -116,9 +106,9 @@ namespace YankiApi.Controllers.V1
             }
 
             Product product = await _context.Products
-    .Include(p => p.ProductImages.Where(img => !img.IsDeleted))
-    .Where(p => !p.IsDeleted)
-    .FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
+                .Include(p => p.ProductImages.Where(img => !img.IsDeleted))
+                .Where(p => !p.IsDeleted)
+                .FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
 
             if (product == null)
             {
@@ -165,8 +155,6 @@ namespace YankiApi.Controllers.V1
             else { return BadRequest(); }
 
         }
-
-
 
         /// <summary>
         /// Delete Product

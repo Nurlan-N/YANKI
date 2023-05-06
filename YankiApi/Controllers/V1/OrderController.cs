@@ -19,7 +19,7 @@ namespace YankiApi.Controllers.V1
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Member")]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -33,7 +33,33 @@ namespace YankiApi.Controllers.V1
             _userManager = userManager;
             _mapper = mapper;
         }
+        /// <summary>
+        /// Get All Orders
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin , Admin")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [Produces("application/json")]
+        public async Task<IActionResult> Get(int? id)
+        {
+            if(id != null && id > 0)
+            {
+                Order order = await _context.Orders.Include(o => o.OrderItems).ThenInclude(i => i.Product).FirstOrDefaultAsync( o => !o.IsDeleted && o.Id == id);
+
+                return Ok(order);
+            }
+
+            List<Order> orders = await _context.Orders.Include(o => o.OrderItems).Where(o => !o.IsDeleted).ToListAsync();
+
+            return Ok(orders);
+        }
+
+
+
+        [HttpGet]
+        [Route("user")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [Produces("application/json")]

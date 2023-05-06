@@ -22,6 +22,10 @@ namespace YankiApi.DTOs.AuthDTOs
         /// </summary>
         public string? Email { get; set; }
         /// <summary>
+        /// User Phone
+        /// </summary>
+        public string? Phone { get; set; }
+        /// <summary>
         /// Nick
         /// </summary>
         public string? UserName { get; set; }
@@ -29,6 +33,10 @@ namespace YankiApi.DTOs.AuthDTOs
         /// Password
         /// </summary>
         public string? Password { get; set; }
+        /// <summary>
+        /// User Role
+        /// </summary>
+        public string? RoleName { get; set; }
     }
     /// <summary>
     /// Validator

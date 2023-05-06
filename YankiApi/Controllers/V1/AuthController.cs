@@ -72,11 +72,12 @@ namespace YankiApi.Controllers.V1
         {
             AppUser appUser = (AppUser)await _userManager.FindByEmailAsync(loginDto.Email);
 
-            if (appUser == null) { return BadRequest(); }
+            if (appUser == null ) { return BadRequest("Email or password is incorrect"); }
+            if (appUser?.LockoutEnd != null) return BadRequest("Your account has been blocked " + appUser.LockoutEnd);
 
             if (!await _userManager.CheckPasswordAsync(appUser, loginDto.Password))
             {
-                return BadRequest();
+                return BadRequest("Email or password is incorrect");
             }
 
             var role = await _userManager.GetRolesAsync(appUser);
@@ -131,7 +132,7 @@ namespace YankiApi.Controllers.V1
 
             SigningCredentials signing = new(key, SecurityAlgorithms.HmacSha256Signature);
 
-            JwtSecurityToken token = new(claims: claims, signingCredentials: signing, expires: DateTime.UtcNow.AddHours(24));
+            JwtSecurityToken token = new(claims: claims, signingCredentials: signing, expires: DateTime.UtcNow.AddHours(240));
 
             JwtSecurityTokenHandler handler = new();
 

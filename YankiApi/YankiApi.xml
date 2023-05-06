@@ -115,6 +115,17 @@
             Order Controller
             </summary>
         </member>
+        <member name="M:YankiApi.Controllers.V1.OrderController.Get(System.Nullable{System.Int32})">
+            <summary>
+            Get All Orders
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:YankiApi.Controllers.V1.ProductController">
+            <summary>
+            Product CRUD
+            </summary>
+        </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.#ctor(YankiApi.DataAccessLayer.AppDbContext,AutoMapper.IMapper,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             Context and Mapper
@@ -123,30 +134,17 @@
             <param name="mapper"></param>
         </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.Post(YankiApi.DTOs.ProductDTOs.ProductPostDto)">
-             <summary>
-             Create Product
-             </summary>
-              <remarks>
-             Sample request:
-            
-                 POST api/product
-                 {
-                    "Title": "Test",
-                    "Price": "50"
-                    "DiscountPrice": "40"
-                    "Extax": "10"
-                    "Count": "40"
-                    "Description": "Test"
-                    "Seria": "Test"
-                    "İmage": "Test"
-                 }
-            
-             </remarks>
-             <param name="product"></param>
-             <returns>A newly created  setting Id</returns> 
-             <response code="400">Object Invalid</response>
-             <response code="409">Name Already Exist</response>
-             <response code="201">Name Already Exist</response>
+            <summary>
+            Create Product
+            </summary>
+             <remarks>
+            Sample request:
+            </remarks>
+            <param name="product"></param>
+            <returns>A newly created  setting Id</returns> 
+            <response code="400">Object Invalid</response>
+            <response code="409">Name Already Exist</response>
+            <response code="201">Name Already Exist</response>
         </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.Get(System.Int32,System.Int32,System.Nullable{System.Int32})">
             <summary>
@@ -245,6 +243,48 @@
             <response code="404">Not Found</response>
             <response code="204">No Content</response>
         </member>
+        <member name="T:YankiApi.Controllers.V1.UserController">
+            <summary>
+            User Controller API
+            </summary>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.UserController.GetUsers(System.Int32,System.Int32)">
+            <summary>
+            Get All Users
+            </summary>
+            <param name="page"></param>
+            <param name="limit"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.UserController.CreateUser(YankiApi.DTOs.AuthDTOs.RegisterDto)">
+            <summary>
+            Create New User 
+            </summary>
+            <param name="registerDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.UserController.ChangeRole(YankiApi.DTOs.UserDTOs.UserRolePutDto)">
+            <summary>
+            Change User Role
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.UserController.BlockUser(System.String,System.DateTimeOffset)">
+            <summary>
+            Block User
+            </summary>
+            <param name="id"></param>
+            <param name="blockDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.UserController.Unblock(System.String)">
+            <summary>
+            Un Block User
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="T:YankiApi.Controllers.V1.WishlistController">
             <summary>
             Wishlist
@@ -323,6 +363,11 @@
             Email
             </summary>
         </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.Phone">
+            <summary>
+            User Phone
+            </summary>
+        </member>
         <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.UserName">
             <summary>
             Nick
@@ -331,6 +376,11 @@
         <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.Password">
             <summary>
             Password
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.RegisterDto.RoleName">
+            <summary>
+            User Role
             </summary>
         </member>
         <member name="T:YankiApi.DTOs.AuthDTOs.RegisterDtoValidator">
@@ -528,6 +578,61 @@
             Setting Value
             </summary>
         </member>
+        <member name="T:YankiApi.DTOs.UserDTOs.UserGetDto">
+            <summary>
+            User Get
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserGetDto.Id">
+            <summary>
+            User Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserGetDto.Name">
+            <summary>
+            User Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserGetDto.Email">
+            <summary>
+            User Email
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserGetDto.SurName">
+            <summary>
+            User Surname
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserGetDto.UserName">
+            <summary>
+            User  Nick
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserGetDto.RoleName">
+            <summary>
+            User Role
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserGetDto.LockoutEnd">
+            <summary>
+            User Login
+            </summary>
+        </member>
+        <member name="T:YankiApi.DTOs.UserDTOs.UserRolePutDto">
+            <summary>
+            Change User Role
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserRolePutDto.UserId">
+            <summary>
+            User Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.UserDTOs.UserRolePutDto.RoleName">
+            <summary>
+            Role Id
+            </summary>
+        </member>
         <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistDeleteDto.Id">
             <summary>
             Product Id
@@ -581,6 +686,51 @@
         <member name="P:YankiApi.DTOs.WishlistDTOs.WishlistPostDto.Count">
             <summary>
             Product Count
+            </summary>
+        </member>
+        <member name="T:YankiApi.Entities.Address">
+            <summary>
+            Adress
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Address.User">
+            <summary>
+            App User
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Address.UserId">
+            <summary>
+            User Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Address.Country">
+            <summary>
+            User Country
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Address.State">
+            <summary>
+            User State
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Address.City">
+            <summary>
+            User City
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Address.PostalCode">
+            <summary>
+            User Postal Code
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Address.IsMain">
+            <summary>
+            Main Address
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Address.Phone">
+            <summary>
+            User Phone
             </summary>
         </member>
         <member name="T:YankiApi.Entities.AppUser">
@@ -643,6 +793,66 @@
             Wishlist
             </summary>
         </member>
+        <member name="T:YankiApi.Entities.Basket">
+            <summary>
+            User Cart
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Basket.ProductId">
+            <summary>
+            Cart item Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Basket.Product">
+            <summary>
+            Product
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Basket.Price">
+            <summary>
+            Item Price
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Basket.UserId">
+            <summary>
+            User Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Basket.User">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Basket.Count">
+            <summary>
+            Item Count
+            </summary>
+        </member>
+        <member name="T:YankiApi.Entities.Category">
+            <summary>
+            Category
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Category.Name">
+            <summary>
+            Category Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Category.Products">
+            <summary>
+            Category Products
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Category.Image">
+            <summary>
+            Category Image
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Category.ImageFile">
+            <summary>
+            Image
+            </summary>
+        </member>
         <member name="T:YankiApi.Entities.Order">
             <summary>
             
@@ -656,6 +866,106 @@
         <member name="P:YankiApi.Entities.Order.UserId">
             <summary>
             
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.No">
+            <summary>
+            Order No
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.OrderItems">
+            <summary>
+            Order Items
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.Name">
+            <summary>
+            User Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.SurName">
+            <summary>
+            User SurName
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.Email">
+            <summary>
+            User Email
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.Phone">
+            <summary>
+            User Phone
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.Country">
+            <summary>
+            User Country
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.City">
+            <summary>
+            User City
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.Address">
+            <summary>
+            User Address
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.PostalCode">
+            <summary>
+            User PostalCode
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.TotalPrice">
+            <summary>
+            Order Total Price
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.State">
+            <summary>
+            User State
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.Status">
+            <summary>
+            Order Status
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Order.Commet">
+            <summary>
+            Order Comment
+            </summary>
+        </member>
+        <member name="T:YankiApi.Entities.OrderItem">
+            <summary>
+            Order Items
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.OrderItem.Price">
+            <summary>
+            Item price
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.OrderItem.Count">
+            <summary>
+            Item Count
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.OrderItem.ProductId">
+            <summary>
+            Item Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.OrderItem.Product">
+            <summary>
+            Order Product
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.OrderItem.OrderId">
+            <summary>
+            Order Id
             </summary>
         </member>
         <member name="P:YankiApi.Entities.Product.Title">
@@ -736,6 +1046,66 @@
         <member name="P:YankiApi.Entities.Product.Category">
             <summary>
             Product Category
+            </summary>
+        </member>
+        <member name="T:YankiApi.Entities.ProductImage">
+            <summary>
+            Product Images
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.ProductImage.Image">
+            <summary>
+            Image
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.ProductImage.ProductId">
+            <summary>
+            Product id
+            </summary>
+        </member>
+        <member name="T:YankiApi.Entities.Setting">
+            <summary>
+            App Settings
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Setting.Key">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Setting.Value">
+            <summary>
+            Value
+            </summary>
+        </member>
+        <member name="T:YankiApi.Entities.Wishlist">
+            <summary>
+            User Wishlist
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Wishlist.ProductId">
+            <summary>
+            Product id
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Wishlist.Product">
+            <summary>
+            Product
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Wishlist.UserId">
+            <summary>
+            User id
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Wishlist.User">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Wishlist.Count">
+            <summary>
+            Item Count
             </summary>
         </member>
     </members>
