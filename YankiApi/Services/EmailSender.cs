@@ -7,6 +7,9 @@ using MailKit.Net.Smtp;
 
 namespace YankiApi.Services
 {
+    /// <summary>
+    /// Email Sender
+    /// </summary>
     public class EmailSender : IEmailSender
     {
 

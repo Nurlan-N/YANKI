@@ -19,6 +19,7 @@ namespace YankiApi.DataAccessLayer
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Subscribe> Subscribes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +27,7 @@ namespace YankiApi.DataAccessLayer
             modelBuilder.ApplyConfiguration(new SettingConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new SubscribeConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

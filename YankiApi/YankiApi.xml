@@ -133,7 +133,7 @@
             Product CRUD
             </summary>
         </member>
-        <member name="M:YankiApi.Controllers.V1.ProductController.#ctor(YankiApi.DataAccessLayer.AppDbContext,AutoMapper.IMapper,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:YankiApi.Controllers.V1.ProductController.#ctor(YankiApi.DataAccessLayer.AppDbContext,AutoMapper.IMapper,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,YankiApi.Interfaces.IEmailSender)">
             <summary>
             Context and Mapper
             </summary>
@@ -249,6 +249,18 @@
             <response code="400">Object Invalid</response>
             <response code="404">Not Found</response>
             <response code="204">No Content</response>
+        </member>
+        <member name="T:YankiApi.Controllers.V1.SubscribeController">
+            <summary>
+            Subscribe For New Product
+            </summary>
+        </member>
+        <member name="M:YankiApi.Controllers.V1.SubscribeController.Post(System.String)">
+            <summary>
+            New Subscribe
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
         </member>
         <member name="T:YankiApi.Controllers.V1.UserController">
             <summary>
@@ -1095,6 +1107,16 @@
             Value
             </summary>
         </member>
+        <member name="T:YankiApi.Entities.Subscribe">
+            <summary>
+            Subscribe 
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.Subscribe.Email">
+            <summary>
+            User Email
+            </summary>
+        </member>
         <member name="T:YankiApi.Entities.Wishlist">
             <summary>
             User Wishlist
@@ -1123,6 +1145,16 @@
         <member name="P:YankiApi.Entities.Wishlist.Count">
             <summary>
             Item Count
+            </summary>
+        </member>
+        <member name="T:YankiApi.Interfaces.IEmailSender">
+            <summary>
+            Send Email Interface
+            </summary>
+        </member>
+        <member name="T:YankiApi.Services.EmailSender">
+            <summary>
+            Email Sender
             </summary>
         </member>
     </members>

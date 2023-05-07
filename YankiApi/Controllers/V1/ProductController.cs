@@ -12,6 +12,7 @@ using YankiApi.DTOs.ProductDTOs;
 using YankiApi.DTOs.SettingDTOs;
 using YankiApi.Entities;
 using YankiApi.Helpers;
+using YankiApi.Interfaces;
 
 namespace YankiApi.Controllers.V1
 {
@@ -25,17 +26,19 @@ namespace YankiApi.Controllers.V1
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IMapper _mapper;
+        private readonly IEmailSender _emailSender;
 
         /// <summary>
         /// Context and Mapper
         /// </summary>
         /// <param name="context"></param>
         /// <param name="mapper"></param>
-        public ProductController(AppDbContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment)
+        public ProductController(AppDbContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
             _context = context;
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
+            _emailSender = emailSender;
         }
         /// <summary>
         /// Create Product
@@ -58,6 +61,17 @@ namespace YankiApi.Controllers.V1
         public async Task<IActionResult> Post([FromForm] ProductPostDto productPostDto)
         {
             Product product = _mapper.Map<Product>(productPostDto);
+
+            List<Subscribe> subscribes = await _context.Subscribes.Where(s => !s.IsDeleted).ToListAsync();
+
+            var message = $"<h3>New Product: {product.Title}</h3> <img src={product.Image} />";
+
+            foreach (Subscribe subscribe in subscribes)
+            {
+                await _emailSender.SendEmailAsync(subscribe.Email, "Added New Product", message);
+
+            }
+
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
@@ -75,20 +89,30 @@ namespace YankiApi.Controllers.V1
         [Produces("application/json")]
         public async Task<IActionResult> Get(int page, int limit, int? categoryId, int? sort)
         {
-            var query = _context.Products.Where(s => !s.IsDeleted);
+            
+            IQueryable<Product> productList = _context.Products.Where(p => !p.IsDeleted && (categoryId != null && categoryId > 0 ? p.CategoryId == categoryId : true)); //  Productlar
 
-            if (categoryId != null && categoryId > 0)
+            if (sort == 1) 
             {
-                query = query.Where(s => s.CategoryId == categoryId);
+                productList = productList.OrderBy(p => p.Title);
             }
-
+            else if (sort == 2) 
+            {
+                productList = productList.OrderByDescending(p => p.Title);
+            }
+            else if (sort == 3) 
+            {
+                productList = productList.OrderByDescending(p => (p.DiscountedPrice > 0 ? p.DiscountedPrice : p.Price));
+            }
+            else if (sort == 4) 
+            {
+                productList = productList.OrderBy(p => (p.DiscountedPrice > 0 ? p.DiscountedPrice : p.Price));
+            }
             var products = new
             {
-                product = await query.Skip((page - 1) * limit).Take(limit).ToListAsync(),
-                count = await query.CountAsync(),
+                product = await productList.Skip((page - 1) * limit).Take(limit).ToListAsync(),
+                count = await productList.CountAsync(),
             };
-
-
             return Ok(products);
         }
 

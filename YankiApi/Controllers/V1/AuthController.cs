@@ -206,7 +206,7 @@ namespace YankiApi.Controllers.V1
             if (!string.IsNullOrEmpty(userDto.Password))
             {
                 string token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                await _userManager.ResetPasswordAsync(user, token, userDto.Password);
+                await _userManager.ResetPasswordAsync(user, token, userDto.NewPassword);
             }
 
             var result = await _userManager.UpdateAsync(user);
