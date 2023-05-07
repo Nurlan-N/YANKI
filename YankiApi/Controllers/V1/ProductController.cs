@@ -73,7 +73,7 @@ namespace YankiApi.Controllers.V1
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [Produces("application/json")]
-        public async Task<IActionResult> Get(int page, int limit, int? categoryId)
+        public async Task<IActionResult> Get(int page, int limit, int? categoryId, int? sort)
         {
             var query = _context.Products.Where(s => !s.IsDeleted);
 
@@ -193,7 +193,7 @@ namespace YankiApi.Controllers.V1
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> DeleteImage(int id, int imageId)
+        public async Task<IActionResult> DeleteImage(int? id, int? imageId)
         {
             if (id == null) return BadRequest();
 

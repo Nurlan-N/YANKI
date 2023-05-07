@@ -36,6 +36,13 @@
             <param name="userDto"></param>
             <returns></returns>
         </member>
+        <member name="M:YankiApi.Controllers.V1.AuthController.ResetPasswordAction(System.String)">
+            <summary>
+            Reset Password User
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
         <member name="T:YankiApi.Controllers.V1.BasketController">
             <summary>
             Wishlist
@@ -146,7 +153,7 @@
             <response code="409">Name Already Exist</response>
             <response code="201">Name Already Exist</response>
         </member>
-        <member name="M:YankiApi.Controllers.V1.ProductController.Get(System.Int32,System.Int32,System.Nullable{System.Int32})">
+        <member name="M:YankiApi.Controllers.V1.ProductController.Get(System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             Get All Product
             </summary>
@@ -182,7 +189,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:YankiApi.Controllers.V1.ProductController.DeleteImage(System.Int32,System.Int32)">
+        <member name="M:YankiApi.Controllers.V1.ProductController.DeleteImage(System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             Delete Product Image
             </summary>
@@ -391,6 +398,16 @@
         <member name="M:YankiApi.DTOs.AuthDTOs.RegisterDtoValidator.#ctor">
             <summary>
             Check
+            </summary>
+        </member>
+        <member name="T:YankiApi.DTOs.AuthDTOs.ResetPasswordDto">
+            <summary>
+            Forgot Password
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.AuthDTOs.ResetPasswordDto.Email">
+            <summary>
+            Email
             </summary>
         </member>
         <member name="P:YankiApi.DTOs.AuthDTOs.UserDto.Phone">

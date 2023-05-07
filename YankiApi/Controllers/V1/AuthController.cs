@@ -15,6 +15,7 @@ using YankiApi.DataAccessLayer;
 using YankiApi.DTOs.AuthDTOs;
 using YankiApi.DTOs.WishlistDTOs;
 using YankiApi.Entities;
+using YankiApi.Interfaces;
 
 namespace YankiApi.Controllers.V1
 {
@@ -31,8 +32,9 @@ namespace YankiApi.Controllers.V1
         private readonly IConfiguration _config;
         private readonly AppDbContext _context;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IEmailSender _emailSender;
 
-        public AuthController(RoleManager<IdentityRole> roleManager, IMapper mapper, UserManager<AppUser> userManager, IConfiguration configuration, AppDbContext context, SignInManager<AppUser> signInManager)
+        public AuthController(RoleManager<IdentityRole> roleManager, IMapper mapper, UserManager<AppUser> userManager, IConfiguration configuration, AppDbContext context, SignInManager<AppUser> signInManager, IEmailSender emailSender)
         {
             _roleManager = roleManager;
             _mapper = mapper;
@@ -40,6 +42,7 @@ namespace YankiApi.Controllers.V1
             _config = configuration;
             _context = context;
             _signInManager = signInManager;
+            _emailSender = emailSender;
         }
 
 
@@ -202,7 +205,7 @@ namespace YankiApi.Controllers.V1
             }
             if (!string.IsNullOrEmpty(userDto.Password))
             {
-                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                string token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 await _userManager.ResetPasswordAsync(user, token, userDto.Password);
             }
 
@@ -212,9 +215,6 @@ namespace YankiApi.Controllers.V1
 
             if (result.Succeeded)
             {
-                // Retrieve the user's claims from the JWT token
-                
-                
                 List<Claim> userClaims = new ()
             {
                 new Claim(ClaimTypes.Name,user.Name),
@@ -232,7 +232,6 @@ namespace YankiApi.Controllers.V1
                     userClaims.Add(claim);
                 }
 
-                // Generate a new token with a new expiration time, using the same user claims
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("JwtSetting:SecretKey").Value));
                 var signing = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                 var expires = DateTime.Now.AddDays(Convert.ToDouble(_config["Jwt:ExpireDays"]));
@@ -244,12 +243,60 @@ namespace YankiApi.Controllers.V1
                     signingCredentials: signing
                 );
 
-                // Return the new token to the client
                 return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(token) });
             }
 
             return BadRequest(result.Errors);
         }
 
+
+        /// <summary>
+        /// Reset Password User
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("resetpassword")]
+        [Produces("application/json")]
+        public async Task<IActionResult> ResetPasswordAction(string email)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            var newPassword = GenerateRandomPassword();
+
+            var result = await _userManager.RemovePasswordAsync(user);
+            if (result.Succeeded)
+            {
+                result = await _userManager.AddPasswordAsync(user, newPassword);
+                if (result.Succeeded)
+                {
+                    var message = $"New password: {newPassword}";
+                    await _emailSender.SendEmailAsync(email, "Reset Password", message);
+
+                    return Ok("Your password has been reset and your new password has been emailed.");
+                }
+            }
+
+            return BadRequest("Password reset failed.");
+        }
+
+        private string GenerateRandomPassword(int length = 15)
+        {
+            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
+            var random = new Random();
+            var chars = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                chars[i] = validChars[random.Next(0, validChars.Length)];
+            }
+            chars[0]= '-';
+            return new string(chars);
+        }
     }
 }

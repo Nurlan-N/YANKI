@@ -5,11 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Net.Mail;
 using System.Reflection;
 using YankiApi.DataAccessLayer;
 using YankiApi.DTOs.SettingDTOs;
 using YankiApi.Entities;
+using YankiApi.Interfaces;
 using YankiApi.Profiles;
+using YankiApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +96,10 @@ builder.Services.AddSwaggerGen( c =>
     });
 });
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+
 
 var app = builder.Build();
 
