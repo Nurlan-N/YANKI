@@ -187,7 +187,7 @@ namespace YankiApi.Controllers.V1
 
             if (user == null)
             {
-                return Unauthorized();
+                return Unauthorized("User is not found");
             }
 
             user.Name = userDto.Name != null && userDto.Name != "" ? userDto.Name : user.Name;
@@ -201,7 +201,7 @@ namespace YankiApi.Controllers.V1
 
             if (!await _userManager.CheckPasswordAsync(user, userDto.Password))
             {
-                return BadRequest();
+                return BadRequest("Password doesn't match");
             }
             if (!string.IsNullOrEmpty(userDto.Password))
             {

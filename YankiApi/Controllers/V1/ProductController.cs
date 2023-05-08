@@ -64,7 +64,7 @@ namespace YankiApi.Controllers.V1
 
             List<Subscribe> subscribes = await _context.Subscribes.Where(s => !s.IsDeleted).ToListAsync();
 
-            var message = $"<h3>New Product: {product.Title}</h3> <img src={product.Image} />";
+            var message = $"<h3>New Product: {product.Title}</h3> <img src=`{product.Image}` />";
 
             foreach (Subscribe subscribe in subscribes)
             {
