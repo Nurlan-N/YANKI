@@ -45,7 +45,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddCors(c=> c.AddDefaultPolicy(c=> c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+builder.Services.AddCors(c=> c.AddPolicy("yankiCors", c=>
+    c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -115,7 +116,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseCors();
+app.UseCors("yankiCors");
 
 app.UseHttpsRedirection();
 
