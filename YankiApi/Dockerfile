@@ -13,4 +13,6 @@ WORKDIR /app
 COPY --from=build /build/out .
 RUN apk add --no-cache tzdata
 RUN ln -s /usr/share/zoneinfo/Asia/Baku /etc/localtime
+RUN apk add --no-cache icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 ENTRYPOINT ["dotnet", "YankiApi.dll"]
