@@ -1,9 +1,5 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Web.Http.ModelBinding;
 using YankiApi.DataAccessLayer;
 using YankiApi.Entities;
 using YankiApi.Extentions;
