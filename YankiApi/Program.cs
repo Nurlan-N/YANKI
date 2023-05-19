@@ -48,7 +48,12 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(c=> {
     c.AddPolicy("yankiCors", c =>
         {
-            c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            c.WithOrigins("http://localhost:3000")
+            .WithOrigins("http://localhost:3001")
+            .WithOrigins("https://localhost:3000")
+            .WithOrigins("https://localhost:3001")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
         });
 });
 

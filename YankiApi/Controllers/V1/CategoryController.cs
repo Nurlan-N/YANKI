@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Cors;
 
 namespace YankiApi.Controllers.V1
 {
-    [EnableCors(PolicyName = "yankiCors")]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase

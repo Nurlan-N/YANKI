@@ -20,7 +20,6 @@ namespace YankiApi.Controllers.V1
     /// <summary>
     /// Product CRUD
     /// </summary>
-    [EnableCors(PolicyName = "yankiCors")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
