@@ -13,9 +13,11 @@ using YankiApi.DTOs.ProductDTOs;
 using YankiApi.Entities;
 using YankiApi.Extentions;
 using YankiApi.Helpers;
+using Microsoft.AspNetCore.Cors;
 
 namespace YankiApi.Controllers.V1
 {
+    [EnableCors(PolicyName = "yankiCors")]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase

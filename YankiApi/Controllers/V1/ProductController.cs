@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace YankiApi.Controllers.V1
     /// <summary>
     /// Product CRUD
     /// </summary>
+    [EnableCors(PolicyName = "yankiCors")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
