@@ -7,6 +7,7 @@ using System.Web.Http.ModelBinding;
 using YankiApi.DataAccessLayer;
 using YankiApi.Entities;
 using YankiApi.Extentions;
+using YankiApi.Interfaces;
 
 namespace YankiApi.DTOs.ProductDTOs
 {
@@ -72,7 +73,7 @@ namespace YankiApi.DTOs.ProductDTOs
     public class ProductPostDtoValidation : AbstractValidator<ProductPostDto>
     {
 
-        public ProductPostDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment,IHttpContextAccessor _contextAccessor)
+        public ProductPostDtoValidation(AppDbContext context, IWebHostEnvironment webHostEnvironment,IHttpContextAccessor _contextAccessor,IEmailSender emailSender)
         {
             RuleFor(p => p.Title)
                 .MaximumLength(200).WithMessage("Max 200 simvol")
@@ -102,7 +103,7 @@ namespace YankiApi.DTOs.ProductDTOs
 
                 if (r?.Files?.Count() <= 6)
                 {
-                    if (r.Files is not null && r.Files.Count() > 0)
+                    if (r?.Files is not null && r?.Files.Count() > 0)
                     {
                         var requestContext = _contextAccessor?.HttpContext?.Request;
                         var baseUrl = $"{requestContext?.Scheme}://{requestContext?.Host}";

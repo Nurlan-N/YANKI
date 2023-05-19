@@ -62,7 +62,45 @@ namespace YankiApi.Controllers.V1
 
             await _userManager.AddToRoleAsync(user, "Member");
 
-            return Ok();
+            var code = GenerateRandomPassword();
+            VerificationCodes verificationEntity = new()
+            {
+                Email = user.Email,
+                Code = code
+            };
+            _context.VerificationCodes.Add(verificationEntity);
+            if (registerDto.Email != null)
+            {
+                var message = $"Code: {code}";
+                await _emailSender.SendEmailAsync(user.Email, "Verification Code", message);
+            }
+            await _context.SaveChangesAsync();
+
+
+            return Ok("A confirmation code has been sent to you by email.");
+
+        }
+        /// <summary>
+        /// Confirm
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("verify")]
+        [Produces("application/json")]
+        public async Task<IActionResult> VerifyCode(string code)
+        {
+            if (code == null) { return BadRequest(); }
+
+            VerificationCodes verification = await _context.VerificationCodes.FirstOrDefaultAsync(v => v.Code == code);
+            if (verification == null) { return NotFound("Сonfirmation code does not match"); }
+            AppUser appUser = await _userManager.FindByEmailAsync(verification.Email);
+            appUser.EmailConfirmed = true;
+
+            _context.VerificationCodes.Remove(verification);
+
+            await _context.SaveChangesAsync();
+            return Ok("Registration successfully completed ");
         }
         /// <summary>
         /// Login Action
@@ -75,8 +113,10 @@ namespace YankiApi.Controllers.V1
         {
             AppUser appUser = (AppUser)await _userManager.FindByEmailAsync(loginDto.Email);
 
-            if (appUser == null ) { return BadRequest("Email or password is incorrect"); }
+            if (appUser == null) { return BadRequest("Email or password is incorrect"); }
             if (appUser?.LockoutEnd != null) return BadRequest("Your account has been blocked " + appUser.LockoutEnd);
+            if (appUser?.EmailConfirmed == false) return BadRequest("");
+
 
             if (!await _userManager.CheckPasswordAsync(appUser, loginDto.Password))
             {
@@ -86,7 +126,7 @@ namespace YankiApi.Controllers.V1
             var role = await _userManager.GetRolesAsync(appUser);
             var userId = await _userManager.GetUserIdAsync(appUser);
             List<Wishlist> wishlist = await _context.Wishlists.Where(w => w.UserId == userId).ToListAsync();
-            string wishlistCoocies = null;
+            string? wishlistCoocies = null;
 
             if (appUser.Wishlist != null && appUser.Wishlist.Count > 0)
             {
@@ -215,7 +255,7 @@ namespace YankiApi.Controllers.V1
 
             if (result.Succeeded)
             {
-                List<Claim> userClaims = new ()
+                List<Claim> userClaims = new()
             {
                 new Claim(ClaimTypes.Name,user.Name),
                 new Claim(ClaimTypes.GivenName,user.UserName),
@@ -228,7 +268,7 @@ namespace YankiApi.Controllers.V1
             };
                 foreach (var r in role)
                 {
-                    Claim claim = new (ClaimTypes.Role, (string)r);
+                    Claim claim = new(ClaimTypes.Role, (string)r);
                     userClaims.Add(claim);
                 }
 
@@ -287,7 +327,7 @@ namespace YankiApi.Controllers.V1
 
         private string GenerateRandomPassword(int length = 15)
         {
-            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
+            const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^*?_-";
             var random = new Random();
             var chars = new char[length];
 
@@ -295,7 +335,7 @@ namespace YankiApi.Controllers.V1
             {
                 chars[i] = validChars[random.Next(0, validChars.Length)];
             }
-            chars[0]= '-';
+            chars[0] = '-';
             return new string(chars);
         }
     }

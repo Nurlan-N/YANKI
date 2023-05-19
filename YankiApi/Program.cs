@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Net.Mail;
 using System.Reflection;
 using YankiApi.DataAccessLayer;
+using YankiApi.DTOs;
 using YankiApi.DTOs.SettingDTOs;
 using YankiApi.Entities;
 using YankiApi.Interfaces;
@@ -95,6 +96,7 @@ builder.Services.AddSwaggerGen( c =>
         }
     });
 });
+builder.Services.Configure<SmtpSetting>(builder.Configuration.GetSection("SmtpSetting"));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();

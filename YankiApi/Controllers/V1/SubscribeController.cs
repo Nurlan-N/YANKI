@@ -46,7 +46,7 @@ namespace YankiApi.Controllers.V1
 
             if (_context.Subscribes.Any(s => s.Email.ToLower() == email.ToLower()))
             {
-                return Ok("This Email Has Already Been Added");
+                return BadRequest("This Email Has Already Been Added");
             }
 
             Subscribe subscribe = new()

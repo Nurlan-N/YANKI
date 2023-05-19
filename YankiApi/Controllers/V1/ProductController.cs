@@ -29,10 +29,12 @@ namespace YankiApi.Controllers.V1
         private readonly IEmailSender _emailSender;
 
         /// <summary>
-        /// Context and Mapper
+        /// constructor
         /// </summary>
         /// <param name="context"></param>
         /// <param name="mapper"></param>
+        /// <param name="webHostEnvironment"></param>
+        /// <param name="emailSender"></param>
         public ProductController(AppDbContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
             _context = context;
@@ -40,13 +42,15 @@ namespace YankiApi.Controllers.V1
             _webHostEnvironment = webHostEnvironment;
             _emailSender = emailSender;
         }
+
+
         /// <summary>
         /// Create Product
         /// </summary>
         ///  <remarks>
         /// Sample request:
         /// </remarks>
-        /// <param name="product"></param>
+        /// <param name="productPostDto"></param>
         /// <returns>A newly created  setting Id</returns> 
         /// <response code="400">Object Invalid</response>
         /// <response code="409">Name Already Exist</response>
@@ -62,21 +66,28 @@ namespace YankiApi.Controllers.V1
         {
             Product product = _mapper.Map<Product>(productPostDto);
 
-            List<Subscribe> subscribes = await _context.Subscribes.Where(s => !s.IsDeleted).ToListAsync();
-
-            var message = $"<h3>New Product: {product.Title}</h3> <img src=`{product.Image}` />";
-
-            foreach (Subscribe subscribe in subscribes)
-            {
-                await _emailSender.SendEmailAsync(subscribe.Email, "Added New Product", message);
-
-            }
-
             await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
+            int save = await _context.SaveChangesAsync();
 
-            return Ok();
-        }
+            if (save > 0)
+            {
+                List<Subscribe> subscribes = await _context.Subscribes.Where(s => !s.IsDeleted).ToListAsync();
+
+                var message = $"<h3>New Product: {product.Title}</h3> <img src={product.Image}/>";
+
+                foreach (Subscribe subscribe in subscribes)
+                {
+                    await _emailSender.SendEmailAsync(subscribe.Email, "Added New Product", message);
+
+                }
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
+         }
         /// <summary>
         /// Get All Product
         /// </summary>
@@ -90,7 +101,7 @@ namespace YankiApi.Controllers.V1
         public async Task<IActionResult> Get(int page, int limit, int? categoryId, int? sort)
         {
             
-            IQueryable<Product> productList = _context.Products.Where(p => !p.IsDeleted && (categoryId != null && categoryId > 0 ? p.CategoryId == categoryId : true)); //  Productlar
+            IQueryable<Product> productList = _context.Products.Where(p => !p.IsDeleted && (categoryId != null && categoryId > 0 ? p.CategoryId == categoryId : true)); 
 
             if (sort == 1) 
             {
@@ -169,14 +180,13 @@ namespace YankiApi.Controllers.V1
         /// <returns></returns>
         [HttpGet]
         [Route("search")]
+        [Produces("application/json")]
         public async Task<IActionResult> Search(string search)
         {
-            if (search != null)
-            {
-                return Ok(await _context.Products
-                .Where(p => p.IsDeleted == false && p.Title.ToLower().Contains(search.ToLower())).ToListAsync());
-            }
-            else { return BadRequest(); }
+            if (search == null) return BadRequest("");
+
+            List<Product> products = await _context.Products.Where(p => p.IsDeleted == false && p.Title.ToLower().Contains(search.ToLower())).ToListAsync();
+            return Ok(products);
 
         }
 
@@ -246,5 +256,7 @@ namespace YankiApi.Controllers.V1
 
             return Ok();
         }
+
+        
     }
 }

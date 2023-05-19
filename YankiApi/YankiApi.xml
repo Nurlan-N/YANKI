@@ -16,6 +16,13 @@
             <param name="registerDto"></param>
             <returns></returns>
         </member>
+        <member name="M:YankiApi.Controllers.V1.AuthController.VerifyCode(System.String)">
+            <summary>
+            Confirm
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
         <member name="M:YankiApi.Controllers.V1.AuthController.Login(YankiApi.DTOs.AuthDTOs.LoginDto)">
             <summary>
             Login Action
@@ -135,10 +142,12 @@
         </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.#ctor(YankiApi.DataAccessLayer.AppDbContext,AutoMapper.IMapper,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,YankiApi.Interfaces.IEmailSender)">
             <summary>
-            Context and Mapper
+            constructor
             </summary>
             <param name="context"></param>
             <param name="mapper"></param>
+            <param name="webHostEnvironment"></param>
+            <param name="emailSender"></param>
         </member>
         <member name="M:YankiApi.Controllers.V1.ProductController.Post(YankiApi.DTOs.ProductDTOs.ProductPostDto)">
             <summary>
@@ -147,7 +156,7 @@
              <remarks>
             Sample request:
             </remarks>
-            <param name="product"></param>
+            <param name="productPostDto"></param>
             <returns>A newly created  setting Id</returns> 
             <response code="400">Object Invalid</response>
             <response code="409">Name Already Exist</response>
@@ -605,6 +614,31 @@
         <member name="P:YankiApi.DTOs.SettingDTOs.SettingPostDto.Value">
             <summary>
             Setting Value
+            </summary>
+        </member>
+        <member name="T:YankiApi.DTOs.SmtpSetting">
+            <summary>
+            Smtp Settings
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.SmtpSetting.Host">
+            <summary>
+            Email Host
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.SmtpSetting.Port">
+            <summary>
+            Smtp Port
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.SmtpSetting.Email">
+            <summary>
+            Admin Email
+            </summary>
+        </member>
+        <member name="P:YankiApi.DTOs.SmtpSetting.Password">
+            <summary>
+            Password
             </summary>
         </member>
         <member name="T:YankiApi.DTOs.UserDTOs.UserGetDto">
@@ -1117,6 +1151,26 @@
             User Email
             </summary>
         </member>
+        <member name="T:YankiApi.Entities.VerificationCodes">
+            <summary>
+            Email Confirm
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.VerificationCodes.Id">
+            <summary>
+            Code Id
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.VerificationCodes.Email">
+            <summary>
+            User Email
+            </summary>
+        </member>
+        <member name="P:YankiApi.Entities.VerificationCodes.Code">
+            <summary>
+            Code
+            </summary>
+        </member>
         <member name="T:YankiApi.Entities.Wishlist">
             <summary>
             User Wishlist
@@ -1156,6 +1210,15 @@
             <summary>
             Email Sender
             </summary>
+        </member>
+        <member name="M:YankiApi.Services.EmailSender.SendEmailAsync(System.String,System.String,System.String)">
+            <summary>
+            Send email Services
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

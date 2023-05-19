@@ -8,7 +8,7 @@ namespace YankiApi.Configuration
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            
+            builder.Property(b => b.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
         }
     }
 }

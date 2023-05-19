@@ -59,6 +59,7 @@ namespace YankiApi.DTOs.AuthDTOs
                 .NotEmpty().WithMessage("UserName Bos ola bilmez");
             RuleFor(r => r.Password)
                .NotEmpty().WithMessage("UserName Bos ola bilmez");
+          
 
         }
 

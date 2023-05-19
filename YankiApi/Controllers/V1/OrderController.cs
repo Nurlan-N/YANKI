@@ -126,9 +126,7 @@ namespace YankiApi.Controllers.V1
                 Email = orderDto.Email,
                 No = (appUser.Orders?.Count() ?? 0) > 0 ? appUser.Orders.Last().No + 1 : 1,
                 OrderItems = orderItems,
-                CreatedAt = DateTime.UtcNow.AddHours(4),
                 CreatedBy = $"{appUser.Name} {appUser.SurName}"
-                
                 
             };
 
